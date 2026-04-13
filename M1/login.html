@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Login</title>
+  <link rel="icon" type="image/x-icon" href="../img/icon.png">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="../Recursos/css/login.css">
+</head>
+<body>
+
+  <div id="login-container">
+    <video id="login-video" autoplay loop muted playsinline>
+      <source src="../Recursos/video/Video Molibdeno.mp4" type="video/mp4">
+      Tu navegador no soporta la etiqueta de video.
+    </video>
+
+    <div class="loading-card login-card">
+      <img src="../Recursos/img/logo.png" alt="Logo" class="logo-img">
+
+      <h1 class="login-welcome">Bienvenido a Anglo American Quellaveco</h1>
+
+      <form class="login-form" id="login-form" action="#" method="post">
+        <div class="form-field">
+          <label for="nombres">Nombres</label>
+          <input type="text" id="nombres" name="nombres" required autocomplete="given-name" placeholder="Ingrese sus nombres">
+        </div>
+
+        <div class="form-field">
+          <label for="apellidos">Apellidos</label>
+          <input type="text" id="apellidos" name="apellidos" required autocomplete="family-name" placeholder="Ingrese sus apellidos">
+        </div>
+
+        <fieldset class="doc-type-fieldset">
+          <legend>Tipo de documento</legend>
+          <div class="doc-type-options" role="radiogroup" aria-label="Tipo de documento">
+            <label class="doc-type-option">
+              <input type="radio" name="tipo_documento" value="dni" checked>
+              <span>DNI</span>
+            </label>
+            <label class="doc-type-option">
+              <input type="radio" name="tipo_documento" value="ce">
+              <span>Carné de extranjería</span>
+            </label>
+            <label class="doc-type-option">
+              <input type="radio" name="tipo_documento" value="pasaporte">
+              <span>Pasaporte</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="form-field">
+          <label for="numero-dni">Número de DNI</label>
+          <input type="text" id="numero-dni" name="numero_dni" required inputmode="numeric" autocomplete="off" placeholder="Ingrese el número de DNI">
+        </div>
+
+        <button id="iniciar-btn" class="start-button" type="submit">Comenzar</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="login-success-modal" class="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title" aria-hidden="true" hidden>
+    <div class="login-modal__backdrop" tabindex="-1"></div>
+    <div class="login-modal__panel">
+      <h2 id="login-modal-title" class="login-modal__title">Datos correctos</h2>
+      <p class="login-modal__text">Los datos ingresados son correctos y se han guardado correctamente.</p>
+      <button type="button" id="login-modal-aceptar" class="start-button login-modal__btn">Aceptar</button>
+    </div>
+  </div>
+
+  <script src="../Recursos/js/login.js"></script>
+</body>
+</html>
