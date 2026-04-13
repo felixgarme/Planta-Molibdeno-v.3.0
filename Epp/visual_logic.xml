@@ -1,6 +1,14 @@
 <xml xmlns="http://www.w3.org/1999/xhtml">
-  <tab name="Init" type="InitTab" active="false" scrollx="20" scrolly="20" scale="0.9"></tab>
-  <tab name="Inicio" type="CommonTab" active="true" scrollx="-76.6598273383247" scrolly="33.19965277777783" scale="1">
+  <tab name="Init" type="InitTab" active="true" scrollx="20.250000000000227" scrolly="20.25" scale="0.9">
+    <block xmlns="https://developers.google.com/blockly/xml" type="initSettings" id="(K0aV+LlEBShM+Fv^r2P" x="192" y="112">
+      <field name="LOAD_COMP_ASSETS">FALSE</field>
+      <field name="FULLSCREEN">TRUE</field>
+      <field name="BKG_TRANSPARENCY">TRUE</field>
+      <field name="PRESERVE_DRAW_BUF">FALSE</field>
+      <field name="FADE_ANNOTATIONS">TRUE</field>
+    </block>
+  </tab>
+  <tab name="Inicio" type="CommonTab" active="false" scrollx="-79.46718512641064" scrolly="33.19965277777783" scale="1">
     <block xmlns="https://developers.google.com/blockly/xml" type="connectorSlot" id=":?iCqso=7:``4PwS]KC)" x="165" y="219">
       <statement name="DO">
         <block type="procedures_callnoreturn" id="-|?QdV8$6UWm{@TVWWt#">

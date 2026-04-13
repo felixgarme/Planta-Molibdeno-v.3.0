@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel de Seguridad EPP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+
+    :root {
+      --primary: #031795;
+      --bg: #ffffff;
+      --text: #031795;
+      --border: rgba(3, 23, 149, 0.2);
+      --radius: 8px;
+      --shadow: 0 4px 12px rgba(3, 23, 149, 0.08);
+      --shadow-hover: 0 8px 24px rgba(3, 23, 149, 0.15);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      font-family: 'Barlow', sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      height: 100vh;
+    }
+
+    .viewer-panel {
+      background-color: rgba(0, 0, 0, 0.4); 
+      background-image: url('../Recursos/img/Epp/wallpaper.png');
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-blend-mode: multiply;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    .viewer-label {
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+    }
+
+    .viewer-label img {
+      max-height: 45px; 
+      max-width: 100%;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+    
+    .viewer-label img:hover {
+      transform: scale(1.05);
+    }
+
+    .viewer-iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+      display: block;
+    }
+
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 24px;
+      gap: 24px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary) transparent;
+      height: 100%;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: fadeInUp 0.4s ease-out forwards;
+    }
+
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--primary);
+      white-space: nowrap;
+    }
+
+    .title-line {
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary) 0%, transparent 100%);
+      border-radius: 2px;
+      opacity: 0.5;
+    }
+
+    .epp-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex: 1;
+    }
+
+    .epp-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      animation: fadeInUp 0.5s ease-out forwards;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      flex: 1;
+    }
+
+    .epp-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary);
+    }
+
+    .epp-card:nth-child(1) { animation-delay: 0.1s; }
+    .epp-card:nth-child(2) { animation-delay: 0.2s; }
+
+    .epp-head {
+      background: var(--primary);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+    }
+
+    .epp-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--bg);
+      line-height: 1.2;
+    }
+
+    .epp-title small {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      opacity: 0.85;
+      margin-top: 2px;
+      text-transform: none;
+    }
+
+    .epp-body {
+      background: var(--bg);
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .epp-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      width: 100%;
+      flex: 1;
+      align-content: stretch;
+    }
+
+    .epp-item {
+      flex: 1 1 140px; 
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 10px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      cursor: default;
+    }
+
+    .epp-item:hover {
+      background: var(--primary);
+      color: var(--bg);
+      border-color: var(--primary);
+    }
+
+    .epp-item-label {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.3;
+      width: 100%;
+    }
+
+    .epp-body-specific {
+      background: var(--bg);
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      justify-content: space-between;
+      flex: 1;
+      padding: 0;
+    }
+
+    .spec-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+      flex: 1;
+      padding: 20px 16px;
+      min-width: 250px;
+    }
+
+    .spec-info-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    .spec-info-desc {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .spec-tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .spec-tag {
+      background: rgba(3, 23, 149, 0.05);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      transition: all 0.2s ease;
+      cursor: default;
+    }
+
+    .spec-tag:hover {
+      background: var(--primary);
+      color: var(--bg);
+    }
+
+    .spec-note {
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.4;
+      border-left: 3px solid var(--primary);
+      padding-left: 12px;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    .spec-iframe-wrap {
+      aspect-ratio: 1 / 1;
+      flex-shrink: 0;
+      background: var(--bg);
+      display: flex;
+    }
+
+    .spec-iframe-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      border-left: 1px solid var(--border);
+    }
+
+    .right-panel::-webkit-scrollbar { width: 6px; }
+    .right-panel::-webkit-scrollbar-track { background: transparent; }
+    .right-panel::-webkit-scrollbar-thumb { background: rgba(3, 23, 149, 0.3); border-radius: 6px; }
+    .right-panel::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+    @media (max-width: 1024px) {
+      .layout {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .viewer-panel {
+        height: 50vh;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      
+      html, body {
+        overflow-y: auto;
+      }
+
+      .epp-wrapper, .epp-card, .epp-body, .epp-items, .epp-body-specific {
+        flex: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .epp-body-specific {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .spec-iframe-wrap {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+      }
+      
+      .spec-iframe-wrap iframe {
+        border-left: none;
+        border-top: 1px solid var(--border);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <div class="viewer-panel">
+    <div class="viewer-label">
+      <img src="../Recursos/img/logo.png" alt="Logo" />
+    </div>
+    <iframe class="viewer-iframe" src="../Epp/Epp.html" allowfullscreen></iframe>
+  </div>
+
+  <div class="right-panel">
+
+    <div class="section-header">
+      <div class="section-title">Equipo de Protección Personal</div>
+      <div class="title-line"></div>
+    </div>
+
+    <div class="epp-wrapper">
+
+      <div class="epp-card">
+        <div class="epp-head">
+          <div class="epp-title">
+            EPP Básico
+            <small>Requerido en toda el área de trabajo</small>
+          </div>
+        </div>
+        <div class="epp-body">
+          <div class="epp-items">
+            <div class="epp-item">
+              <div class="epp-item-label">Casco c/ visera y barbiquejo</div>
+            </div>
+            <div class="epp-item">
+              <div class="epp-item-label">Lentes de seguridad</div>
+            </div>
+            <div class="epp-item">
+              <div class="epp-item-label">Zapatos de seguridad</div>
+            </div>
+            <div class="epp-item">
+              <div class="epp-item-label">Bloqueador solar</div>
+            </div>
+            <div class="epp-item">
+              <div class="epp-item-label">Chaleco / ropa c/ cinta reflectiva</div>
+            </div>
+            <div class="epp-item">
+              <div class="epp-item-label">Protección auditiva</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="epp-card">
+        <div class="epp-head">
+          <div class="epp-title">
+            EPP Específico
+            <small>Según peligros y riesgos identificados</small>
+          </div>
+        </div>
+        <div class="epp-body-specific">
+          <div class="spec-info">
+            <div class="spec-info-title">Uso adicional al EPP básico</div>
+            <div class="spec-info-desc">
+              Se usa adicionalmente al EPP básico y está acorde a los peligros y riesgos identificados para la tarea y área de trabajo.
+            </div>
+            <div class="spec-tag-list">
+              <span class="spec-tag">Respirador</span>
+              <span class="spec-tag">Arnés</span>
+              <span class="spec-tag">Guantes químicos</span>
+              <span class="spec-tag">Traje Tyvek</span>
+              <span class="spec-tag">Pantalla facial</span>
+              <span class="spec-tag">Botas de jebe</span>
+            </div>
+            <div class="spec-note">
+              El supervisor de seguridad determina el equipo específico requerido según la evaluación de riesgos del área.
+            </div>
+          </div>
+
+          <div class="spec-iframe-wrap">
+            <iframe src="../Mascara/Mascara.html" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

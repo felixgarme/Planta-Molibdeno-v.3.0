@@ -1,0 +1,43 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <tab name="Init" type="InitTab" active="false" scrollx="20" scrolly="20" scale="0.9"></tab>
+  <tab name="inicio" type="CommonTab" active="true" scrollx="-11.205064561631843" scrolly="-19.093749999999943" scale="1">
+    <block xmlns="https://developers.google.com/blockly/xml" type="connectorSlot" id="u3@glD)KzNLoNBK@|SHA" x="257" y="372">
+      <statement name="DO">
+        <block type="lookAt" id="nP_x4PHnu(D=hvX?w#|}">
+          <value name="LOOKAT">
+            <shadow type="objectList" id="Ml?*wMR[]R]WIR%|#N)|">
+              <field name="FIELDNAME">&lt;none&gt;</field>
+            </shadow>
+            <block type="objectList" id=");Lnyr[J;(mG,dk-a*@2">
+              <field name="FIELDNAME">home</field>
+            </block>
+          </value>
+          <value name="DURATION">
+            <shadow type="math_number" id="J3F=ofEXJ]s+gn3/^2AO">
+              <field name="NUM">1</field>
+            </shadow>
+          </value>
+          <next>
+            <block type="zoomCameraToObject" id=":wIHquNkH,D_6~!CS9*.">
+              <mutation xmlns="http://www.w3.org/1999/xhtml" whenfinishedslot="false"></mutation>
+              <value name="OBJECT">
+                <shadow type="objectList" id="`^gD+cAZqDGhP#rL4jkC">
+                  <field name="FIELDNAME">&lt;none&gt;</field>
+                </shadow>
+                <block type="objectList" id="B.%_,o]39~k(3I=F1qg3">
+                  <field name="FIELDNAME">home</field>
+                </block>
+              </value>
+              <value name="DURATION">
+                <shadow type="math_number" id="r]WX/;KCvBd8Rn$/@~xl">
+                  <field name="NUM">1</field>
+                </shadow>
+              </value>
+            </block>
+          </next>
+        </block>
+      </statement>
+    </block>
+  </tab>
+  <editorsettings viewport-x="1180.1999999999998" viewport-y="37" viewport-w="798.8" viewport-h="448.5" viewport-hidden="false" toolbox-library-mode="false" toolbox-minimized-mode="false"></editorsettings>
+</xml>

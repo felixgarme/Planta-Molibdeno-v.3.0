@@ -1,0 +1,39 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <tab name="Init" type="InitTab" active="false" scrollx="20" scrolly="0" scale="0.9"></tab>
+  <tab name="inicio" type="CommonTab" active="true" scrollx="-113.97727966308594" scrolly="-30.25" scale="1">
+    <block xmlns="https://developers.google.com/blockly/xml" type="connectorSlot" id="u3@glD)KzNLoNBK@|SHA" x="257" y="372">
+      <statement name="DO">
+        <block type="tweenCameraExt" id="I[RJc?Z9=,w%=iVNg)hg">
+          <mutation xmlns="http://www.w3.org/1999/xhtml" whenfinishedslot="true"></mutation>
+          <field name="MOVEMENT_TYPE">LINEAR</field>
+          <value name="POSITION">
+            <block type="objectList" id=";Bu:Y]*2he7![P9-EpGU">
+              <field name="FIELDNAME">homeCAM</field>
+            </block>
+          </value>
+          <value name="LOOKAT">
+            <block type="objectList" id="?c4uGhZ6Zp53C?V.3HYU">
+              <field name="FIELDNAME">home</field>
+            </block>
+          </value>
+          <value name="DURATION">
+            <shadow type="math_number" id="9//,cl3W8ThMZBh1_F`7">
+              <field name="NUM">1</field>
+            </shadow>
+          </value>
+          <statement name="DO">
+            <block type="autoRotateCamera" id="q#+8*fvf^n9!eo%l|7:g">
+              <field name="ON_OFF">ON</field>
+              <value name="SPEED">
+                <shadow type="math_number" id="@;?n]_e1wAXwey@FYu3b">
+                  <field name="NUM">2</field>
+                </shadow>
+              </value>
+            </block>
+          </statement>
+        </block>
+      </statement>
+    </block>
+  </tab>
+  <editorsettings viewport-x="1180.1999999999998" viewport-y="37" viewport-w="798.8" viewport-h="448.5" viewport-hidden="false" toolbox-library-mode="false" toolbox-minimized-mode="false"></editorsettings>
+</xml>
