@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargador de HTMLs desde JSON</title>
+    <style>
+        /* Ocultar el scroll en toda la página */
+        html, body {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        #contenedor {
+            padding: 20px;
+            border: 1px solid #ccc;
+            min-height: 200px;
+            /* Si quieres que el contenedor tenga su propio scroll interno sin afectar la página principal, puedes cambiar esto a 'overflow-y: auto;' */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="contenedor">Cargando configuración...</div>
+    <button onclick="siguientehtml()" style="margin-top: 10px; margin-left: 20px;" id="btnSiguiente" disabled>Siguiente HTML</button>
+
+    <script>
+        let listaHtml = [];
+        let indiceActual = 0;
+        const cacheHtml = {}; 
+        const contenedor = document.getElementById('contenedor');
+        const btnSiguiente = document.getElementById('btnSiguiente');
+
+        // 1. Cargar el JSON inicial
+        async function cargarConfiguracion() {
+            try {
+                const respuesta = await fetch('./Recursos/list/html.json');
+                if (!respuesta.ok) throw new Error("No se pudo cargar html.json");
+                
+                listaHtml = await respuesta.json();
+                
+                if (listaHtml.length > 0) {
+                    btnSiguiente.disabled = false; // Habilitar el botón
+                    cargarPagina(indiceActual);    // Cargar el primer HTML
+                } else {
+                    contenedor.innerHTML = "El archivo html.json está vacío.";
+                }
+            } catch (error) {
+                console.error(error);
+                contenedor.innerHTML = `<p style="color:red;">Error al cargar html.json</p>`;
+            }
+        }
+
+        // 2. Función para mostrar la página
+        async function cargarPagina(indice) {
+            if (indice >= listaHtml.length) return;
+
+            const url = listaHtml[indice];
+            contenedor.innerHTML = "Cargando..."; // Feedback visual rápido
+
+            if (cacheHtml[url]) {
+                contenedor.innerHTML = cacheHtml[url];
+                console.log(`Mostrado desde caché: ${url}`);
+            } else {
+                try {
+                    const respuesta = await fetch(url);
+                    if (!respuesta.ok) throw new Error("HTTP error " + respuesta.status);
+                    const html = await respuesta.text();
+                    contenedor.innerHTML = html;
+                    cacheHtml[url] = html; 
+                    console.log(`Descargado y mostrado: ${url}`);
+                } catch (error) {
+                    console.error(`Error al cargar ${url}:`, error);
+                    contenedor.innerHTML = `<p>Error al cargar <b>${url}</b>.</p>`;
+                }
+            }
+
+            // Iniciar precarga del siguiente elemento
+            precargarPagina(indice + 1);
+        }
+
+        // 3. Función para precargar en segundo plano
+        async function precargarPagina(indice) {
+            if (indice >= listaHtml.length) {
+                btnSiguiente.disabled = true; // Deshabilitar botón si no hay más páginas
+                return;
+            }
+
+            const url = listaHtml[indice];
+            
+            if (!cacheHtml[url]) {
+                try {
+                    const respuesta = await fetch(url);
+                    if (!respuesta.ok) throw new Error("HTTP error " + respuesta.status);
+                    const html = await respuesta.text();
+                    cacheHtml[url] = html; 
+                    console.log(`Precargado en memoria: ${url}`);
+                } catch (error) {
+                    console.error(`Error al precargar ${url}:`, error);
+                }
+            }
+        }
+
+        // 4. Exponer la función global para el botón o llamadas externas
+        window.siguientehtml = function() {
+            if (indiceActual < listaHtml.length - 1) {
+                indiceActual++;
+                cargarPagina(indiceActual);
+            } else {
+                console.log("Ya no hay más páginas.");
+            }
+        };
+
+        // Iniciar todo el proceso al cargar el script
+        cargarConfiguracion();
+
+    </script>
+</body>
+</html>
