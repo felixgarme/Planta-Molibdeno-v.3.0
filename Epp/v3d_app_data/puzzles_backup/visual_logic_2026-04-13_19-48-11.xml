@@ -1,5 +1,5 @@
 <xml xmlns="http://www.w3.org/1999/xhtml">
-  <tab name="Init" type="InitTab" active="false" scrollx="20.250000000000227" scrolly="20.25" scale="0.9">
+  <tab name="Init" type="InitTab" active="true" scrollx="20.250000000000227" scrolly="20.25" scale="0.9">
     <block xmlns="https://developers.google.com/blockly/xml" type="initSettings" id="(K0aV+LlEBShM+Fv^r2P" x="192" y="112">
       <field name="LOAD_COMP_ASSETS">FALSE</field>
       <field name="FULLSCREEN">TRUE</field>
@@ -8,27 +8,11 @@
       <field name="FADE_ANNOTATIONS">TRUE</field>
     </block>
   </tab>
-  <tab name="Inicio" type="CommonTab" active="true" scrollx="113.84732055664062" scrolly="27" scale="1">
+  <tab name="Inicio" type="CommonTab" active="false" scrollx="-79.46718512641064" scrolly="33.19965277777783" scale="1">
     <block xmlns="https://developers.google.com/blockly/xml" type="connectorSlot" id=":?iCqso=7:``4PwS]KC)" x="165" y="219">
       <statement name="DO">
         <block type="procedures_callnoreturn" id="-|?QdV8$6UWm{@TVWWt#">
           <mutation name="loop inicio"></mutation>
-          <next>
-            <block type="setCameraParam" id="5O93_`|FxEIcBHlXF$vt">
-              <mutation xmlns="http://www.w3.org/1999/xhtml" type="ALLOW_ZOOM"></mutation>
-              <field name="TYPE">ALLOW_ZOOM</field>
-              <value name="ALLOW_ZOOM">
-                <shadow type="logic_boolean" id="jB_-}2A!P+)1_ch~@$]*">
-                  <field name="BOOL">FALSE</field>
-                </shadow>
-              </value>
-              <value name="OBJECT">
-                <shadow type="objectList" id="]vp($ZvIxYPM=,mFEw1U">
-                  <field name="FIELDNAME">Camera</field>
-                </shadow>
-              </value>
-            </block>
-          </next>
         </block>
       </statement>
     </block>

@@ -3,36 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cargador de HTMLs desde JSON</title>
+    <title>Cargador 3D con Precarga en Capas</title>
     <style>
-        /* Ocultar el scroll en toda la página */
         html, body {
             overflow: hidden;
             margin: 0;
             padding: 0;
+            height: 100%;
+            background-color: transparent;
         }
 
-        #contenedor {
-            padding: 20px;
-            border: 1px solid #ccc;
-            min-height: 200px;
-            /* Si quieres que el contenedor tenga su propio scroll interno sin afectar la página principal, puedes cambiar esto a 'overflow-y: auto;' */
+        #contenedor-iframes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .capa-html {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            margin: 0;
+            padding: 0;
+            opacity: 0; 
+            z-index: -1;
+            transition: opacity 0.5s ease-in-out; 
+        }
+
+        .capa-activa {
+            opacity: 1;
+            z-index: 10; 
         }
     </style>
 </head>
 <body>
 
-    <div id="contenedor">Cargando configuración...</div>
-    <button onclick="siguientehtml()" style="margin-top: 10px; margin-left: 20px;" id="btnSiguiente" disabled>Siguiente HTML</button>
+    <div id="contenedor-iframes"></div>
 
     <script>
         let listaHtml = [];
         let indiceActual = 0;
-        const cacheHtml = {}; 
-        const contenedor = document.getElementById('contenedor');
-        const btnSiguiente = document.getElementById('btnSiguiente');
+        const iframesCreados = {}; 
+        
+        const contenedor = document.getElementById('contenedor-iframes');
 
-        // 1. Cargar el JSON inicial
         async function cargarConfiguracion() {
             try {
                 const respuesta = await fetch('./Recursos/list/html.json');
@@ -41,78 +61,68 @@
                 listaHtml = await respuesta.json();
                 
                 if (listaHtml.length > 0) {
-                    btnSiguiente.disabled = false; // Habilitar el botón
-                    cargarPagina(indiceActual);    // Cargar el primer HTML
-                } else {
-                    contenedor.innerHTML = "El archivo html.json está vacío.";
+                    crearCapa(indiceActual, true);
+                    crearCapa(indiceActual + 1, false);
                 }
             } catch (error) {
-                console.error(error);
-                contenedor.innerHTML = `<p style="color:red;">Error al cargar html.json</p>`;
+                console.error("Error al cargar JSON", error);
             }
         }
 
-        // 2. Función para mostrar la página
-        async function cargarPagina(indice) {
-            if (indice >= listaHtml.length) return;
+        function crearCapa(indice, hacerActiva) {
+            // Se añade validación para evitar índices negativos
+            if (indice < 0 || indice >= listaHtml.length) return;
 
             const url = listaHtml[indice];
-            contenedor.innerHTML = "Cargando..."; // Feedback visual rápido
 
-            if (cacheHtml[url]) {
-                contenedor.innerHTML = cacheHtml[url];
-                console.log(`Mostrado desde caché: ${url}`);
-            } else {
-                try {
-                    const respuesta = await fetch(url);
-                    if (!respuesta.ok) throw new Error("HTTP error " + respuesta.status);
-                    const html = await respuesta.text();
-                    contenedor.innerHTML = html;
-                    cacheHtml[url] = html; 
-                    console.log(`Descargado y mostrado: ${url}`);
-                } catch (error) {
-                    console.error(`Error al cargar ${url}:`, error);
-                    contenedor.innerHTML = `<p>Error al cargar <b>${url}</b>.</p>`;
-                }
-            }
-
-            // Iniciar precarga del siguiente elemento
-            precargarPagina(indice + 1);
-        }
-
-        // 3. Función para precargar en segundo plano
-        async function precargarPagina(indice) {
-            if (indice >= listaHtml.length) {
-                btnSiguiente.disabled = true; // Deshabilitar botón si no hay más páginas
+            if (iframesCreados[indice]) {
                 return;
             }
 
-            const url = listaHtml[indice];
+            const nuevoIframe = document.createElement('iframe');
+            nuevoIframe.src = url;
+            nuevoIframe.className = 'capa-html';
             
-            if (!cacheHtml[url]) {
-                try {
-                    const respuesta = await fetch(url);
-                    if (!respuesta.ok) throw new Error("HTTP error " + respuesta.status);
-                    const html = await respuesta.text();
-                    cacheHtml[url] = html; 
-                    console.log(`Precargado en memoria: ${url}`);
-                } catch (error) {
-                    console.error(`Error al precargar ${url}:`, error);
-                }
+            if (hacerActiva) {
+                nuevoIframe.classList.add('capa-activa');
+            }
+
+            contenedor.appendChild(nuevoIframe);
+            iframesCreados[indice] = nuevoIframe;
+        }
+
+        function mostrarCapa(indice) {
+            Object.values(iframesCreados).forEach(iframe => {
+                iframe.classList.remove('capa-activa');
+            });
+
+            if (iframesCreados[indice]) {
+                iframesCreados[indice].classList.add('capa-activa');
             }
         }
 
-        // 4. Exponer la función global para el botón o llamadas externas
+        // Función para avanzar
         window.siguientehtml = function() {
             if (indiceActual < listaHtml.length - 1) {
                 indiceActual++;
-                cargarPagina(indiceActual);
-            } else {
-                console.log("Ya no hay más páginas.");
+                
+                mostrarCapa(indiceActual);
+                crearCapa(indiceActual + 1, false);
             }
         };
 
-        // Iniciar todo el proceso al cargar el script
+        // Función nueva para retroceder
+        window.retrocederhtml = function() {
+            if (indiceActual > 0) {
+                indiceActual--;
+                
+                mostrarCapa(indiceActual);
+                // Aunque al retroceder la capa anterior probablemente ya esté creada,
+                // llamamos a crearCapa por si acaso se necesita precargar un salto largo.
+                crearCapa(indiceActual - 1, false);
+            }
+        };
+
         cargarConfiguracion();
 
     </script>
