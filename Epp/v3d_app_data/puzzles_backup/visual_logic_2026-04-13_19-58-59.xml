@@ -32,7 +32,7 @@
                   <value name="TEXT">
                     <shadow type="textMultiline" id="Ot~F_3+p2t#XttM@^NJG">
                       <field name="HIGHLIGHT_MODE">javascript</field>
-                      <field name="TEXT" editor-height="3" editor-width="520">window.app = app; &amp;#10;import("../Recursos/js/imports/import.js");</field>
+                      <field name="TEXT" editor-height="3" editor-width="520">window.app = app; &amp;#10;import("../Recorsos/js/imports/import.js");</field>
                     </shadow>
                   </value>
                 </block>
