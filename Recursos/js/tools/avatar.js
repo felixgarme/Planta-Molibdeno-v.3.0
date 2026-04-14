@@ -133,10 +133,10 @@ window.avatar = (function() {
             burbujaTexto.style.marginLeft = '1rem'; burbujaTexto.style.maxWidth = 'calc(90vw - 120px)';
             contenedor.style.transform = estaVisible ? 'translateX(0px)' : 'translateX(-120%)';
         } else {
-            contenedor.style.top = '86%';
+            contenedor.style.top = '88%';
             contenedor.style.left = '30px';
             contenedor.style.maxWidth = 'none';
-            envolturaVideo.style.width = '190px'; envolturaVideo.style.height = '190px';
+            envolturaVideo.style.width = '160px'; envolturaVideo.style.height = '160px';
             burbujaTexto.style.fontSize = '1rem'; burbujaTexto.style.padding = '18px 24px';
             burbujaTexto.style.marginLeft = '25px'; burbujaTexto.style.maxWidth = '75%';
             contenedor.style.transform = estaVisible ? 'translateY(-50%) translateX(0px)' : 'translateY(-50%) translateX(-120px)';
