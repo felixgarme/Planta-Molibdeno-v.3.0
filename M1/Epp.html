@@ -27,7 +27,7 @@
       background: var(--bg);
       font-family: 'Barlow', sans-serif;
       color: var(--text);
-      overflow-x: hidden;
+      overflow: hidden; /* Previene el scroll global para usar el de los paneles */
     }
 
     @keyframes fadeInUp {
@@ -141,6 +141,7 @@
       animation: fadeInUp 0.5s ease-out forwards;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       flex: 1;
+      background: var(--bg);
     }
 
     .epp-card:hover {
@@ -207,7 +208,7 @@
       align-items: center;
       justify-content: center;
       transition: all 0.2s ease;
-      cursor: default;
+      cursor: pointer;
     }
 
     .epp-item:hover {
@@ -275,7 +276,7 @@
       border-radius: 12px;
       text-transform: uppercase;
       transition: all 0.2s ease;
-      cursor: default;
+      cursor: pointer;
     }
 
     .spec-tag:hover {
@@ -313,21 +314,23 @@
     .right-panel::-webkit-scrollbar-thumb { background: rgba(3, 23, 149, 0.3); border-radius: 6px; }
     .right-panel::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
+    /* Modificaciones específicas para modo celular (Scroll independiente) */
     @media (max-width: 1024px) {
       .layout {
         grid-template-columns: 1fr;
-        height: auto;
-        min-height: 100vh;
+        grid-template-rows: 45vh 55vh; /* Divide la pantalla en dos */
+        height: 100vh;
       }
 
       .viewer-panel {
-        height: 50vh;
+        height: 100%;
         border-right: none;
         border-bottom: 1px solid var(--border);
       }
       
-      html, body {
-        overflow-y: auto;
+      .right-panel {
+        height: 100%;
+        overflow-y: auto; /* Asegura el scroll exclusivo de este panel */
       }
 
       .epp-wrapper, .epp-card, .epp-body, .epp-items, .epp-body-specific {
@@ -362,7 +365,7 @@
     <div class="viewer-label">
       <img src="../Recursos/img/logo.png" alt="Logo" />
     </div>
-    <iframe class="viewer-iframe" src="../Epp/Epp.html" allowfullscreen></iframe>
+    <iframe id="viewer-iframe" class="viewer-iframe" src="../Epp/Epp.html" allowfullscreen></iframe>
   </div>
 
   <div class="right-panel">
@@ -383,22 +386,22 @@
         </div>
         <div class="epp-body">
           <div class="epp-items">
-            <div class="epp-item">
+            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['casco']();">
               <div class="epp-item-label">Casco c/ visera y barbiquejo</div>
             </div>
-            <div class="epp-item">
+            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['lentes']();">
               <div class="epp-item-label">Lentes de seguridad</div>
             </div>
-            <div class="epp-item">
+            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['zapatos']();">
               <div class="epp-item-label">Zapatos de seguridad</div>
             </div>
-            <div class="epp-item">
+            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['bloqueador']();">
               <div class="epp-item-label">Bloqueador solar</div>
             </div>
-            <div class="epp-item">
+            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['ropa']();">
               <div class="epp-item-label">Chaleco / ropa c/ cinta reflectiva</div>
             </div>
-            <div class="epp-item">
+            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['auditiva']();">
               <div class="epp-item-label">Protección auditiva</div>
             </div>
           </div>
@@ -406,33 +409,50 @@
       </div>
 
       <div class="epp-card">
-        <div class="epp-head">
-          <div class="epp-title">
-            EPP Específico
-            <small>Según peligros y riesgos identificados</small>
+        <div id="epp-placeholder" style="cursor: pointer; display: flex; align-items: center; justify-content: center; flex-direction: column; min-height: 150px; background: var(--primary); padding: 20px; transition: background 0.3s ease;" 
+             onclick="
+                document.getElementById('epp-placeholder').style.display = 'none'; 
+                document.getElementById('epp-content-wrapper').style.display = 'flex'; 
+                document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['respirador']();
+             "
+             onmouseover="this.style.background='#021070'" 
+             onmouseout="this.style.background='var(--primary)'">
+          <div class="epp-title" style="font-size: 20px; text-align: center;">
+            EPP ESPECÍFICO
+            <small style="margin-top: 6px; font-size: 13px;">Presiona aquí para ver el contenido</small>
           </div>
         </div>
-        <div class="epp-body-specific">
-          <div class="spec-info">
-            <div class="spec-info-title">Uso adicional al EPP básico</div>
-            <div class="spec-info-desc">
-              Se usa adicionalmente al EPP básico y está acorde a los peligros y riesgos identificados para la tarea y área de trabajo.
-            </div>
-            <div class="spec-tag-list">
-              <span class="spec-tag">Respirador</span>
-              <span class="spec-tag">Arnés</span>
-              <span class="spec-tag">Guantes químicos</span>
-              <span class="spec-tag">Traje Tyvek</span>
-              <span class="spec-tag">Pantalla facial</span>
-              <span class="spec-tag">Botas de jebe</span>
-            </div>
-            <div class="spec-note">
-              El supervisor de seguridad determina el equipo específico requerido según la evaluación de riesgos del área.
+
+        <div id="epp-content-wrapper" style="display: none; flex-direction: column; flex: 1;">
+          <div class="epp-head">
+            <div class="epp-title">
+              EPP Específico
+              <small>Según peligros y riesgos identificados</small>
             </div>
           </div>
+          
+          <div class="epp-body-specific" id="epp-specific-content">
+            <div class="spec-info">
+              <div class="spec-info-title">Uso adicional al EPP básico</div>
+              <div class="spec-info-desc">
+                Se usa adicionalmente al EPP básico y está acorde a los peligros y riesgos identificados para la tarea y área de trabajo.
+              </div>
+              <div class="spec-tag-list">
+                <span class="spec-tag" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['respirador']();">Respirador</span>
+                <span class="spec-tag" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['arnes']();">Arnés</span>
+                <span class="spec-tag" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['guantes']();">Guantes químicos</span>
+                <span class="spec-tag" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['traje']();">Traje Tyvek</span>
+                <span class="spec-tag" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['pantalla']();">Pantalla facial</span>
+                <span class="spec-tag" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['botas']();">Botas de jebe</span>
+              </div>
+              <div class="spec-note">
+                El supervisor de seguridad determina el equipo específico requerido según la evaluación de riesgos del área.
+              </div>
+            </div>
 
-          <div class="spec-iframe-wrap">
-            <iframe src="../Mascara/Mascara.html" allowfullscreen></iframe>
+            <div class="spec-iframe-wrap">
+              <iframe src="../Mascara/Mascara.html" allowfullscreen></iframe>
+            </div>
           </div>
         </div>
       </div>

@@ -8,7 +8,7 @@
       <field name="FADE_ANNOTATIONS">TRUE</field>
     </block>
   </tab>
-  <tab name="Inicio" type="CommonTab" active="true" scrollx="56.347320556640625" scrolly="21.75" scale="1">
+  <tab name="Inicio" type="CommonTab" active="false" scrollx="-4.902679443359375" scrolly="60.5" scale="1">
     <block xmlns="https://developers.google.com/blockly/xml" type="connectorSlot" id=":?iCqso=7:``4PwS]KC)" x="176" y="53">
       <statement name="DO">
         <block type="procedures_callnoreturn" id="-|?QdV8$6UWm{@TVWWt#">
@@ -82,5 +82,127 @@
       </statement>
     </block>
   </tab>
-  <editorsettings viewport-x="1180.1999999999998" viewport-y="37" viewport-w="798.8" viewport-h="448.5" viewport-hidden="false" toolbox-library-mode="false" toolbox-minimized-mode="false"></editorsettings>
+  <tab name="Mostrar" type="CommonTab" active="true" scrollx="1495.9080871582032" scrolly="362.6656250000001" scale="0.9">
+    <block xmlns="https://developers.google.com/blockly/xml" type="procedures_defnoreturn" id="O`S0pHWHOFwk#OHa}U3Z" x="-996" y="-716">
+      <field name="NAME">casco</field>
+      <comment pinned="false" h="80" w="160">Describe this function...</comment>
+      <statement name="STACK">
+        <block type="execScript" id="%9#48%h_b;}RaX`FTa0}">
+          <value name="TEXT">
+            <shadow type="textMultiline" id="12sqQ|ZP25BUA^Vm]n_1">
+              <field name="HIGHLIGHT_MODE">javascript</field>
+              <field name="TEXT" editor-height="2" editor-width="520">mostrar("Object004");</field>
+            </shadow>
+          </value>
+          <next>
+            <block type="execScript" id="SA}W7tTd4Y}~8yk12m(w">
+              <value name="TEXT">
+                <shadow type="textMultiline" id="uf2bG6Rf4meR+2Op9f8(">
+                  <field name="HIGHLIGHT_MODE">javascript</field>
+                  <field name="TEXT" editor-height="2" editor-width="520">mostrar("Object002");</field>
+                </shadow>
+              </value>
+            </block>
+          </next>
+        </block>
+      </statement>
+    </block>
+    <block xmlns="https://developers.google.com/blockly/xml" type="procedures_defnoreturn" id="21`}L[C]ODQt7=#b3!`[" x="-1022" y="-478">
+      <field name="NAME">lentes</field>
+      <comment pinned="false" h="80" w="160">Describe this function...</comment>
+      <statement name="STACK">
+        <block type="execScript" id="N;uTxPz1|%k/.:?EGy,H">
+          <value name="TEXT">
+            <shadow type="textMultiline" id="TN-mYjIOC3.a:*dGzDg^">
+              <field name="HIGHLIGHT_MODE">javascript</field>
+              <field name="TEXT" editor-height="2" editor-width="520">mostrar("LentesSeguridadHombre");</field>
+            </shadow>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block xmlns="https://developers.google.com/blockly/xml" type="procedures_defnoreturn" id="uVRnmWucG1Y$R_1DKff*" x="-1002" y="-346">
+      <field name="NAME">ropa</field>
+      <comment pinned="false" h="80" w="160">Describe this function...</comment>
+      <statement name="STACK">
+        <block type="execScript" id="s}tlA@cn#lkgM9~?-e9(">
+          <value name="TEXT">
+            <shadow type="textMultiline" id=",iSbU}Mbjbx;A+-.uq-1">
+              <field name="HIGHLIGHT_MODE">javascript</field>
+              <field name="TEXT" editor-height="2" editor-width="520">mostrar("Chaleco");</field>
+            </shadow>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block xmlns="https://developers.google.com/blockly/xml" type="procedures_defnoreturn" id="H3B{_FCG@1Ncx5QW?;`?" x="-992" y="-175">
+      <field name="NAME">auditiva</field>
+      <comment pinned="false" h="80" w="160">Describe this function...</comment>
+      <statement name="STACK">
+        <block type="execScript" id="],@b(8n+WULjrhbE)Xn1">
+          <value name="TEXT">
+            <shadow type="textMultiline" id="N;pF7TK#IUV~R[9ZbR1e">
+              <field name="HIGHLIGHT_MODE">javascript</field>
+              <field name="TEXT" editor-height="2" editor-width="520">mostrar("Object005");</field>
+            </shadow>
+          </value>
+          <next>
+            <block type="execScript" id="pol_N2aL0PHNUHfrUFH`">
+              <value name="TEXT">
+                <shadow type="textMultiline" id="v0.`PvNN;m=g.Eiu/;/*">
+                  <field name="HIGHLIGHT_MODE">javascript</field>
+                  <field name="TEXT" editor-height="2" editor-width="520">mostrar("Object006");</field>
+                </shadow>
+              </value>
+              <next>
+                <block type="execScript" id="fCLTSV2S}EH%vcGLsu8Y">
+                  <value name="TEXT">
+                    <shadow type="textMultiline" id="%1TN@B+`+bB#IopNKJc+">
+                      <field name="HIGHLIGHT_MODE">javascript</field>
+                      <field name="TEXT" editor-height="2" editor-width="520">mostrar("ProtectorAuditivoHombre");</field>
+                    </shadow>
+                  </value>
+                </block>
+              </next>
+            </block>
+          </next>
+        </block>
+      </statement>
+    </block>
+    <block xmlns="https://developers.google.com/blockly/xml" type="procedures_defnoreturn" id="?Z}m-:NM$Ak[eK5#Z|Qx" x="-984" y="217">
+      <field name="NAME">respirador</field>
+      <comment pinned="false" h="80" w="160">Describe this function...</comment>
+      <statement name="STACK">
+        <block type="execScript" id="/FZm=TzPxnMoa^g!kgIC">
+          <value name="TEXT">
+            <shadow type="textMultiline" id="@bKqvk+60[.8b4v~AT_)">
+              <field name="HIGHLIGHT_MODE">javascript</field>
+              <field name="TEXT" editor-height="2" editor-width="520">mostrar("Box002");</field>
+            </shadow>
+          </value>
+          <next>
+            <block type="execScript" id="gSaRBczheu_D#jywn/!_">
+              <value name="TEXT">
+                <shadow type="textMultiline" id="9D?]Z5Ml87=/{-4U-R{P">
+                  <field name="HIGHLIGHT_MODE">javascript</field>
+                  <field name="TEXT" editor-height="2" editor-width="520">mostrar("Box001");</field>
+                </shadow>
+              </value>
+              <next>
+                <block type="execScript" id="l$JAPD3Z!wCGx4/kUDzs">
+                  <value name="TEXT">
+                    <shadow type="textMultiline" id="uIV!tHffmLL@(|O;*VNI">
+                      <field name="HIGHLIGHT_MODE">javascript</field>
+                      <field name="TEXT" editor-height="2" editor-width="520">mostrar("11_MascaraSiliconada");</field>
+                    </shadow>
+                  </value>
+                </block>
+              </next>
+            </block>
+          </next>
+        </block>
+      </statement>
+    </block>
+  </tab>
+  <editorsettings viewport-x="1180.1999999999998" viewport-y="37" viewport-w="798.8" viewport-h="448.5" viewport-hidden="true" toolbox-library-mode="false" toolbox-minimized-mode="false"></editorsettings>
 </xml>
