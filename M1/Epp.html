@@ -211,7 +211,7 @@
       cursor: pointer;
     }
 
-    .epp-item:hover {
+    .epp-item:hover, .epp-item.clicked {
       background: var(--primary);
       color: var(--bg);
       border-color: var(--primary);
@@ -259,31 +259,6 @@
       line-height: 1.5;
     }
 
-    .spec-tag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .spec-tag {
-      background: rgba(3, 23, 149, 0.05);
-      border: 1px solid var(--primary);
-      color: var(--primary);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      padding: 4px 10px;
-      border-radius: 12px;
-      text-transform: uppercase;
-      transition: all 0.2s ease;
-      cursor: pointer;
-    }
-
-    .spec-tag:hover {
-      background: var(--primary);
-      color: var(--bg);
-    }
-
     .spec-note {
       font-size: 12px;
       color: var(--text);
@@ -314,11 +289,47 @@
     .right-panel::-webkit-scrollbar-thumb { background: rgba(3, 23, 149, 0.3); border-radius: 6px; }
     .right-panel::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
-    /* Modificaciones específicas para modo celular (Scroll independiente) */
+    /* Estilos del botón Continuar */
+    .btn-continuar {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: var(--primary);
+      color: var(--bg);
+      border: none;
+      padding: 16px 36px;
+      border-radius: 50px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(30px);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 9999;
+    }
+
+    .btn-continuar.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .btn-continuar:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: var(--shadow-hover);
+      background-color: #021070;
+    }
+
+    /* Modificaciones específicas para modo celular */
     @media (max-width: 1024px) {
       .layout {
         grid-template-columns: 1fr;
-        grid-template-rows: 45vh 55vh; /* Divide la pantalla en dos */
+        grid-template-rows: 45vh 55vh; 
         height: 100vh;
       }
 
@@ -330,11 +341,18 @@
       
       .right-panel {
         height: 100%;
-        overflow-y: auto; /* Asegura el scroll exclusivo de este panel */
+        overflow-y: auto; 
       }
 
       .epp-wrapper, .epp-card, .epp-body, .epp-items, .epp-body-specific {
         flex: none;
+      }
+      
+      .btn-continuar {
+        bottom: 20px;
+        right: 20px;
+        padding: 14px 28px;
+        font-size: 18px;
       }
     }
 
@@ -386,22 +404,22 @@
         </div>
         <div class="epp-body">
           <div class="epp-items">
-            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['casco']();">
+            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['casco'](); registrarClic('casco', this);">
               <div class="epp-item-label">Casco c/ visera y barbiquejo</div>
             </div>
-            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['lentes']();">
+            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['lentes'](); registrarClic('lentes', this);">
               <div class="epp-item-label">Lentes de seguridad</div>
             </div>
-            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['zapatos']();">
+            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['zapatos'](); registrarClic('zapatos', this);">
               <div class="epp-item-label">Zapatos de seguridad</div>
             </div>
-            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['bloqueador']();">
+            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['bloqueador'](); registrarClic('bloqueador', this);">
               <div class="epp-item-label">Bloqueador solar</div>
             </div>
-            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['ropa']();">
+            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['ropa'](); registrarClic('ropa', this);">
               <div class="epp-item-label">Chaleco / ropa c/ cinta reflectiva</div>
             </div>
-            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['auditiva']();">
+            <div class="epp-item" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['auditiva'](); registrarClic('auditiva', this);">
               <div class="epp-item-label">Protección auditiva</div>
             </div>
           </div>
@@ -414,6 +432,7 @@
                 document.getElementById('epp-placeholder').style.display = 'none'; 
                 document.getElementById('epp-content-wrapper').style.display = 'flex'; 
                 document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['respirador']();
+                registrarClic('especifico', this);
              "
              onmouseover="this.style.background='#021070'" 
              onmouseout="this.style.background='var(--primary)'">
@@ -437,14 +456,6 @@
               <div class="spec-info-desc">
                 Se usa adicionalmente al EPP básico y está acorde a los peligros y riesgos identificados para la tarea y área de trabajo.
               </div>
-              <div class="spec-tag-list">
-                <span class="spec-tag" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['respirador']();">Respirador</span>
-                <span class="spec-tag" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['arnes']();">Arnés</span>
-                <span class="spec-tag" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['guantes']();">Guantes químicos</span>
-                <span class="spec-tag" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['traje']();">Traje Tyvek</span>
-                <span class="spec-tag" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['pantalla']();">Pantalla facial</span>
-                <span class="spec-tag" onclick="document.getElementById('viewer-iframe').contentWindow.v3d.puzzles.procedures['botas']();">Botas de jebe</span>
-              </div>
               <div class="spec-note">
                 El supervisor de seguridad determina el equipo específico requerido según la evaluación de riesgos del área.
               </div>
@@ -460,6 +471,33 @@
     </div>
   </div>
 </div>
+
+<button id="btnContinuar" class="btn-continuar" onclick="siguientehtml()">Continuar</button>
+<script>
+  // Son 6 items básicos + 1 cuadro grande del EPP específico = 7 puntos a presionar
+  const PUNTOS_REQUERIDOS = 7; 
+  let puntosPresionados = new Set();
+
+  function registrarClic(id, elemento) {
+    puntosPresionados.add(id);
+    
+    // Le añade una clase visualmente para saber que ya fue presionado (solo a los básicos)
+    if(elemento && elemento.classList.contains('epp-item')) {
+      elemento.classList.add('clicked');
+    }
+
+    // Verificar si ya se presionaron todos los puntos necesarios
+    if (puntosPresionados.size === PUNTOS_REQUERIDOS) {
+      document.getElementById('btnContinuar').classList.add('show');
+    }
+  }
+
+  // --- SOLUCIÓN: Agrega la función que falta aquí ---
+  function siguientehtml() {
+    // Reemplaza 'tu_siguiente_pagina.html' con la ruta real del archivo al que quieres redirigir
+    window.location.href = 'tu_siguiente_pagina.html'; 
+  }
+</script>
 
 </body>
 </html>
