@@ -5,12 +5,14 @@
   <title>Login</title>
   <link rel="icon" type="image/x-icon" href="../img/icon.png">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <link rel="preload" href="../Recursos/video/Video Molibdeno.mp4" as="video" type="video/mp4">
   <link rel="stylesheet" type="text/css" href="../Recursos/css/login.css">
 </head>
 <body>
 
   <div id="login-container">
-    <video id="login-video" autoplay loop muted playsinline>
+    <div id="login-video-placeholder" aria-hidden="true"></div>
+    <video id="login-video" autoplay loop muted playsinline preload="auto">
       <source src="../Recursos/video/Video Molibdeno.mp4" type="video/mp4">
       Tu navegador no soporta la etiqueta de video.
     </video>
@@ -56,15 +58,6 @@
 
         <button id="iniciar-btn" class="start-button" type="submit">Comenzar</button>
       </form>
-    </div>
-  </div>
-
-  <div id="login-success-modal" class="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title" aria-hidden="true" hidden>
-    <div class="login-modal__backdrop" tabindex="-1"></div>
-    <div class="login-modal__panel">
-      <h2 id="login-modal-title" class="login-modal__title">Datos correctos</h2>
-      <p class="login-modal__text">Los datos ingresados son correctos y se han guardado correctamente.</p>
-      <button type="button" id="login-modal-aceptar" class="start-button login-modal__btn">Aceptar</button>
     </div>
   </div>
 

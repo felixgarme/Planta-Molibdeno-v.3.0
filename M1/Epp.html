@@ -371,6 +371,92 @@
         border-top: 1px solid var(--border);
       }
     }
+
+    @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+      .layout {
+        grid-template-columns: 42% 58%;
+        grid-template-rows: 1fr;
+        height: 100vh;
+      }
+
+      .viewer-panel {
+        border-right: 1px solid var(--border);
+        border-bottom: none;
+      }
+
+      .viewer-label {
+        min-height: 42px;
+        padding: 6px 10px;
+      }
+
+      .viewer-label img {
+        max-height: 32px;
+      }
+
+      .right-panel {
+        padding: 12px;
+        gap: 12px;
+      }
+
+      .section-title {
+        font-size: 17px;
+      }
+
+      .epp-wrapper {
+        gap: 12px;
+      }
+
+      .epp-head {
+        padding: 8px 12px;
+      }
+
+      .epp-title {
+        font-size: 14px;
+      }
+
+      .epp-title small {
+        font-size: 10px;
+      }
+
+      .epp-body {
+        padding: 10px;
+      }
+
+      .epp-items {
+        gap: 8px;
+      }
+
+      .epp-item {
+        flex: 1 1 120px;
+        padding: 10px 8px;
+      }
+
+      .epp-item-label {
+        font-size: 12px;
+      }
+
+      .spec-info {
+        min-width: 0;
+        padding: 12px;
+        gap: 8px;
+      }
+
+      .spec-info-title {
+        font-size: 13px;
+      }
+
+      .spec-info-desc,
+      .spec-note {
+        font-size: 11px;
+      }
+
+      .btn-continuar {
+        bottom: 12px;
+        right: 12px;
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+    }
   </style>
 </head>
 <body>

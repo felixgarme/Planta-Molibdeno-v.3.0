@@ -1,0 +1,79 @@
+@font-face {
+    font-family: 'AASMART Sans';
+    src: url('../fonts/AASMARTSANS-THIN.TTF') format('truetype');
+    font-style: normal;
+    font-weight: 100;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'AASMART Sans';
+    src: url('../fonts/AASMARTSANS-LIGHT.TTF') format('truetype');
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'AASMART Sans';
+    src: url('../fonts/AASMARTSANS-REGULAR.TTF') format('truetype');
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'AASMART Sans';
+    src: url('../fonts/AASMARTSANS-SEMIBOLD.TTF') format('truetype');
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'AASMART Sans';
+    src: url('../fonts/AASMARTSANS-BOLD.TTF') format('truetype');
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'AASMART Sans';
+    src: url('../fonts/AASMARTSANS-THINITALIC.TTF') format('truetype');
+    font-style: italic;
+    font-weight: 100;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'AASMART Sans';
+    src: url('../fonts/AASMARTSANS-LIGHTITALIC.TTF') format('truetype');
+    font-style: italic;
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'AASMART Sans';
+    src: url('../fonts/AASMARTSANS-REGULARITALIC.TTF') format('truetype');
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'AASMART Sans';
+    src: url('../fonts/AASMARTSANS-SEMIBOLDITALIC.TTF') format('truetype');
+    font-style: italic;
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'AASMART Sans';
+    src: url('../fonts/AASMARTSANS-BOLDITALIC.TTF') format('truetype');
+    font-style: italic;
+    font-weight: 700;
+    font-display: swap;
+}

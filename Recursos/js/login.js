@@ -1,51 +1,62 @@
 (function () {
     var STORAGE_KEY = 'quellaveco_login_usuario';
+    var VIDEO_READY_CLASS = 'video-ready';
   
+    var loginContainer = document.getElementById('login-container');
+    var loginVideo = document.getElementById('login-video');
     var form = document.getElementById('login-form');
-    var modal = document.getElementById('login-success-modal');
-    var modalAceptar = document.getElementById('login-modal-aceptar');
-    var modalBackdrop = modal && modal.querySelector('.login-modal__backdrop');
-  
-    function openSuccessModal() {
-      if (!modal) return;
-      modal.hidden = false;
-      modal.setAttribute('aria-hidden', 'false');
-      requestAnimationFrame(function () {
-        modal.classList.add('is-open');
-      });
-      if (modalAceptar) modalAceptar.focus();
+
+    function markVideoReady() {
+      if (!loginContainer) return;
+      loginContainer.classList.add(VIDEO_READY_CLASS);
     }
-  
-    function closeSuccessModal() {
-      if (!modal) return;
-      modal.classList.remove('is-open');
-      modal.setAttribute('aria-hidden', 'true');
-      var done = false;
-      var finish = function () {
-        if (done) return;
-        done = true;
-        modal.hidden = true;
-      };
-      var onEnd = function (e) {
-        if (e.target !== modal) return;
-        modal.removeEventListener('transitionend', onEnd);
-        finish();
-      };
-      modal.addEventListener('transitionend', onEnd);
-      setTimeout(finish, 320);
-    }
-  
-    if (modalAceptar) {
-      modalAceptar.addEventListener('click', closeSuccessModal);
-    }
-    if (modalBackdrop) {
-      modalBackdrop.addEventListener('click', closeSuccessModal);
-    }
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && modal && modal.classList.contains('is-open')) {
-        closeSuccessModal();
+
+    function setupVideoBackground() {
+      if (!loginVideo) {
+        markVideoReady();
+        return;
       }
-    });
+
+      var completed = false;
+      var complete = function () {
+        if (completed) return;
+        completed = true;
+        markVideoReady();
+        loginVideo.removeEventListener('loadeddata', complete);
+        loginVideo.removeEventListener('canplay', complete);
+      };
+
+      if (loginVideo.readyState >= 3) {
+        complete();
+      } else {
+        loginVideo.addEventListener('loadeddata', complete, { once: true });
+        loginVideo.addEventListener('canplay', complete, { once: true });
+        // Evita que el fondo quede oscuro mucho tiempo en redes lentas.
+        setTimeout(complete, 5000);
+      }
+
+      // En algunos navegadores autoplay puede necesitar un llamado explícito.
+      var playPromise = loginVideo.play();
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(function () {
+          complete();
+        });
+      }
+    }
+
+    setupVideoBackground();
+  
+    function resolveSiguienteHtml() {
+      if (typeof window.siguientehtml === 'function') {
+        return window.siguientehtml;
+      }
+
+      if (window.parent && typeof window.parent.siguientehtml === 'function') {
+        return window.parent.siguientehtml.bind(window.parent);
+      }
+
+      return null;
+    }
   
     if (!form) return;
   
@@ -76,7 +87,12 @@
       console.log('(objeto):', datosUsuario);
       console.log('(localStorage[' + JSON.stringify(STORAGE_KEY) + ']):', localStorage.getItem(STORAGE_KEY));
   
-      openSuccessModal();
+      var siguienteHtml = resolveSiguienteHtml();
+      if (siguienteHtml) {
+        siguienteHtml();
+      } else {
+        console.error('No se encontro la funcion window.siguientehtml()');
+      }
     });
   })();
   

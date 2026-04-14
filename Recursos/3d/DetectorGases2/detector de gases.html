@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<!-- __V3D_PUZZLES__ - enable Puzzles button in the App Manager -->
+<!-- __V3D_TEMPLATE__ - template-based file; delete this line to prevent this file from being updated -->
+<html lang="en">
+<head>
+  <title>Verge3D Web Interactive</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+  <meta name="description" content="Interactive 3D Web application made with Verge3D. Immerse yourself in amazing graphics experience offered by state-of-the art WebGL and HTML5 technologies.">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Verge3D Web Interactive">
+  <meta name="twitter:description" content="Interactive 3D Web application made with Verge3D. Immerse yourself in amazing graphics experience offered by state-of-the art WebGL and HTML5 technologies.">
+  <meta name="twitter:image:src" content="https://cdn.soft8soft.com/images/player_socials.jpg">
+  <meta property="og:title" content="Verge3D Web Interactive">
+  <meta property="og:description" content="Interactive 3D Web application made with Verge3D. Immerse yourself in amazing graphics experience offered by state-of-the art WebGL and HTML5 technologies.">
+  <meta property="og:image" content="https://cdn.soft8soft.com/images/player_socials.jpg">
+  <meta property="og:type" content="website">
+
+  <meta name="generator" content="Verge3D 4.11.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="media/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="media/favicon-48x48.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="media/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="media/favicon-16x16.png">
+  <link rel="manifest" href="media/manifest.json">
+  <link rel="mask-icon" href="media/safari-pinned-tab.svg" color="#0048a5">
+  <meta name="theme-color" content="#ffffff">
+
+  <script src="v3d.js"></script>
+  <script src="detector de gases.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="detector de gases.css">
+
+  <style>
+    html, body, #v3d-container {
+      background: #ffffff !important;
+    }
+
+    #pantalla-carga-custom {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999; /* Asegura que esté por encima del canvas 3D */
+      transition: opacity 0.6s ease-out, visibility 0.6s ease-out;
+      color: white;
+      font-family: 'AASMART Sans', sans-serif;
+    }
+
+    /* Oculta la UI de carga para mostrar solo el modelo */
+    #pantalla-carga-custom,
+    .spinner,
+    #texto-carga {
+      display: none !important;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.2);
+      border-top-color: #0048a5; /* Color corporativo de Verge3D */
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Clase que añadiremos con JS para ocultar la pantalla suavemente */
+    .oculto {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+  </style>
+
+</head>
+
+<body>
+  <noscript>Your browser does not support JavaScript, that's why this Verge3D app could not be loaded. Try another browser or contact the <a href="https://www.soft8soft.com">developers</a> for help.</noscript>
+
+  <div id="v3d-container">
+   <!--  <div id="fullscreen-button" class="fullscreen-button fullscreen-open" title="Toggle fullscreen mode"></div>
+  --> </div>
+
+  <script>
+    (function() {
+      // Como Verge3D carga los Puzzles de manera asíncrona, usamos un intervalo 
+      // para comprobar continuamente si el objeto de procedimientos ya existe.
+      const verificadorPuzzles = setInterval(() => {
+        
+        // Comprobamos si el objeto global v3d, sus puzzles y el diccionario de procedimientos están listos
+        if (window.v3d && window.v3d.puzzles && window.v3d.puzzles.procedures) {
+          
+          // Guardamos la función original del puzzle por si tiene lógica que no queremos perder
+          const procedimientoOriginal = v3d.puzzles.procedures["cargado"];
+          
+          // Sobreescribimos el procedimiento para "escucharlo"
+          v3d.puzzles.procedures["cargado"] = function() {
+            console.log("Procedimiento 'cargado' detectado. Ocultando pantalla de carga...");
+            
+            // 1. Ocultar la pantalla de carga añadiendo la clase CSS 'oculto'
+            const pantallaCarga = document.getElementById('pantalla-carga-custom');
+            if (pantallaCarga) {
+              pantallaCarga.classList.add('oculto');
+              
+              // Opcional: Eliminar el nodo del DOM después de la transición para liberar memoria
+              setTimeout(() => {
+                if (pantallaCarga.parentNode) {
+                  pantallaCarga.parentNode.removeChild(pantallaCarga);
+                }
+              }, 600); // Coincide con el tiempo de transición en CSS (0.6s)
+            }
+            
+            // 2. Ejecutar el código original de tu procedimiento en los Puzzles (si lo hay)
+            if (typeof procedimientoOriginal === 'function') {
+              procedimientoOriginal.apply(this, arguments);
+            }
+          };
+          
+          // Como ya hemos inyectado nuestro "escucha", detenemos el intervalo para no consumir recursos
+          clearInterval(verificadorPuzzles);
+          console.log("Escucha del procedimiento 'cargado' inicializada correctamente.");
+        }
+      }, 100); // Revisa cada 100 milisegundos
+      
+      // Fallback de seguridad: Si por alguna razón el procedimiento nunca es llamado,
+      // evitamos que el usuario se quede atrapado en la pantalla de carga para siempre.
+      setTimeout(() => {
+        clearInterval(verificadorPuzzles);
+        const pantallaCarga = document.getElementById('pantalla-carga-custom');
+        if (pantallaCarga && !pantallaCarga.classList.contains('oculto')) {
+          console.warn("Tiempo de espera agotado. Forzando el cierre de la pantalla de carga.");
+          pantallaCarga.classList.add('oculto');
+        }
+      }, 30000); // 30 segundos de tiempo máximo de espera
+
+    })();
+  </script>
+</body>
+
+</html>

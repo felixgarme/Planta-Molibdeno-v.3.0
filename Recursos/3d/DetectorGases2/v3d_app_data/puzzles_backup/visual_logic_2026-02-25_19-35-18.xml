@@ -1,0 +1,133 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <tab name="Init" type="InitTab" active="false" scrollx="20.250000000000227" scrolly="-58.5" scale="0.9">
+    <block xmlns="https://developers.google.com/blockly/xml" type="initSettings" id="1@E27ktB;./l__uOK/Zq" x="22" y="65">
+      <field name="LOAD_COMP_ASSETS">FALSE</field>
+      <field name="FULLSCREEN">TRUE</field>
+      <field name="BKG_TRANSPARENCY">TRUE</field>
+      <field name="PRESERVE_DRAW_BUF">FALSE</field>
+      <field name="FADE_ANNOTATIONS">TRUE</field>
+    </block>
+  </tab>
+  <tab name="General" type="CommonTab" active="true" scrollx="170.95343017578125" scrolly="-123" scale="1">
+    <block xmlns="https://developers.google.com/blockly/xml" type="connectorSlot" id="=INmRH?99aZ)nu4f6Nv/" x="67" y="220">
+      <statement name="DO">
+        <block type="execScript" id="-v+O=cm2kCfeMCG:HsWm">
+          <value name="TEXT">
+            <shadow type="textMultiline" id="t1TDaWqf3#B8`1y%=:!=">
+              <field name="HIGHLIGHT_MODE">javascript</field>
+              <field name="TEXT" editor-height="3" editor-width="520">window.app = app; &amp;#10;import("./imports.js");</field>
+            </shadow>
+          </value>
+          <next>
+            <block type="setCameraParam" id="m|XbR[!(i8.UqnmD3dtH">
+              <mutation xmlns="http://www.w3.org/1999/xhtml" type="ALLOW_PANNING"></mutation>
+              <field name="TYPE">ALLOW_PANNING</field>
+              <value name="ALLOW_PANNING">
+                <shadow type="logic_boolean" id="Eo`}AM~EtYM=P[73BazI">
+                  <field name="BOOL">FALSE</field>
+                </shadow>
+              </value>
+              <value name="OBJECT">
+                <shadow type="objectList" id="eTzYP6}JrhcI53N)Shx[">
+                  <field name="FIELDNAME">Camera</field>
+                </shadow>
+              </value>
+              <next>
+                <block type="setCameraParam" id="4c:L63Z(#2k{OnvGZK2[">
+                  <mutation xmlns="http://www.w3.org/1999/xhtml" type="ALLOW_ZOOM"></mutation>
+                  <field name="TYPE">ALLOW_ZOOM</field>
+                  <value name="ALLOW_ZOOM">
+                    <shadow type="logic_boolean" id="[@}C/@aB[CMJ#ZOh]vOa">
+                      <field name="BOOL">FALSE</field>
+                    </shadow>
+                  </value>
+                  <value name="OBJECT">
+                    <shadow type="objectList" id=":g1)DPVg0V_`qt:.A.o|">
+                      <field name="FIELDNAME">Camera</field>
+                    </shadow>
+                  </value>
+                  <next>
+                    <block type="zoomCameraToObject" id="zS%mR:ecq/I=~2~Z6B.Q">
+                      <mutation xmlns="http://www.w3.org/1999/xhtml" whenfinishedslot="true"></mutation>
+                      <value name="OBJECT">
+                        <shadow type="objectList" id="(9RCh4z(67DXmhy_dIJ4">
+                          <field name="FIELDNAME">detector</field>
+                        </shadow>
+                      </value>
+                      <value name="DURATION">
+                        <shadow type="math_number" id="ltz[xZaU~(w~vtph8a/4">
+                          <field name="NUM">1</field>
+                        </shadow>
+                      </value>
+                      <statement name="DO">
+                        <block type="autoRotateCamera" id="|g(%[*xtkk7RYhw2[]:m">
+                          <field name="ON_OFF">ON</field>
+                          <value name="SPEED">
+                            <shadow type="math_number" id="ulmm#KIGnfK#1@;J8Y?$">
+                              <field name="NUM">1</field>
+                            </shadow>
+                          </value>
+                        </block>
+                      </statement>
+                      <next>
+                        <block type="procedures_callnoreturn" id="|`rGN+zzgy|m-{75(Ed%">
+                          <mutation name="a"></mutation>
+                        </block>
+                      </next>
+                    </block>
+                  </next>
+                </block>
+              </next>
+            </block>
+          </next>
+        </block>
+      </statement>
+    </block>
+    <block xmlns="https://developers.google.com/blockly/xml" type="procedures_defnoreturn" id="DHc`O/1.*@2kEEt:%OYX" x="102" y="603">
+      <field name="NAME">a</field>
+      <comment pinned="false" h="80" w="160">Describe this function...</comment>
+      <statement name="STACK">
+        <block type="setLightParam" id="z![F}mR_)l9c!M]Kt4n]">
+          <field name="TYPE">INTENSITY</field>
+          <value name="INTENSITY">
+            <shadow type="math_number" id="DkJBCH4+b|(2doM+?qn;">
+              <field name="NUM">1</field>
+            </shadow>
+          </value>
+          <value name="OBJECT">
+            <shadow type="objectList" id="_,++egzo2~l(Dx]n:./m">
+              <field name="FIELDNAME">&lt;none&gt;</field>
+            </shadow>
+            <block type="allObjectList" id="H9E--Qe@QO9KLk+43a`="></block>
+          </value>
+          <next>
+            <block type="setTimeout" id="2a^6YYjeYDR/G#[|@itq">
+              <value name="VALUE">
+                <shadow type="math_number" id="$3sHzz8vVD)2_e5*Z]H1">
+                  <field name="NUM">1</field>
+                </shadow>
+              </value>
+              <statement name="DO">
+                <block type="setLightParam" id="lAFm_IBIIJ]b%0}vv-^$">
+                  <field name="TYPE">INTENSITY</field>
+                  <value name="INTENSITY">
+                    <shadow type="math_number" id="nE+M=KxC;EQt;NJx4[,7">
+                      <field name="NUM">0</field>
+                    </shadow>
+                  </value>
+                  <value name="OBJECT">
+                    <shadow type="objectList" id="_,++egzo2~l(Dx]n:./m">
+                      <field name="FIELDNAME">&lt;none&gt;</field>
+                    </shadow>
+                    <block type="allObjectList" id="0T:_MaNS5m2*qJUIatk$"></block>
+                  </value>
+                </block>
+              </statement>
+            </block>
+          </next>
+        </block>
+      </statement>
+    </block>
+  </tab>
+  <editorsettings viewport-x="1180.1999999999998" viewport-y="37" viewport-w="798.8" viewport-h="448.5" viewport-hidden="false" toolbox-library-mode="false" toolbox-minimized-mode="false"></editorsettings>
+</xml>

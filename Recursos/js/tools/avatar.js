@@ -6,6 +6,7 @@ window.avatar = (function() {
 
     let temporizadorRespaldo; 
     let isGlobalMuted = false;
+    let mantenerVisible = false;
 
     function accionMutear() {
         isGlobalMuted = !isGlobalMuted; 
@@ -124,20 +125,20 @@ window.avatar = (function() {
             burbujaTexto.style.margin = 'auto'; burbujaTexto.style.maxWidth = 'calc(40vw - 80px)';
             contenedor.style.transform = estaVisible ? 'translateX(0px)' : 'translateX(-120%)';
         } else if (esMovil && !esHechado) {
-            contenedor.style.top = '7vh';
+            contenedor.style.top = '4vh';
             contenedor.style.left = '2vh';
             contenedor.style.maxWidth = '90vw';
             envolturaVideo.style.width = '100px'; envolturaVideo.style.height = '100px';
             burbujaTexto.style.fontSize = '12.8px'; burbujaTexto.style.padding = '18px 24px';
-            burbujaTexto.style.marginLeft = '20px'; burbujaTexto.style.maxWidth = 'calc(90vw - 120px)';
+            burbujaTexto.style.marginLeft = '1rem'; burbujaTexto.style.maxWidth = 'calc(90vw - 120px)';
             contenedor.style.transform = estaVisible ? 'translateX(0px)' : 'translateX(-120%)';
         } else {
-            contenedor.style.top = '50%';
+            contenedor.style.top = '86%';
             contenedor.style.left = '30px';
             contenedor.style.maxWidth = 'none';
             envolturaVideo.style.width = '190px'; envolturaVideo.style.height = '190px';
-            burbujaTexto.style.fontSize = '20px'; burbujaTexto.style.padding = '18px 24px';
-            burbujaTexto.style.marginLeft = '25px'; burbujaTexto.style.maxWidth = '350px';
+            burbujaTexto.style.fontSize = '1rem'; burbujaTexto.style.padding = '18px 24px';
+            burbujaTexto.style.marginLeft = '25px'; burbujaTexto.style.maxWidth = '75%';
             contenedor.style.transform = estaVisible ? 'translateY(-50%) translateX(0px)' : 'translateY(-50%) translateX(-120px)';
         }
     }
@@ -168,7 +169,7 @@ window.avatar = (function() {
         contenedor = document.createElement('div');
         contenedor.style.position = 'fixed'; contenedor.style.zIndex = '9999';
         contenedor.style.display = 'flex'; contenedor.style.flexDirection = 'row'; contenedor.style.alignItems = 'center';
-        contenedor.style.fontFamily = '"Segoe UI", Roboto, Helvetica, Arial, sans-serif'; contenedor.style.pointerEvents = 'none'; 
+        contenedor.style.fontFamily = '"AASMART Sans", sans-serif'; contenedor.style.pointerEvents = 'none'; 
         contenedor.style.opacity = '0'; contenedor.style.transition = 'all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1)'; 
 
         envolturaVideo = document.createElement('div');
@@ -178,13 +179,17 @@ window.avatar = (function() {
         envolturaVideo.style.border = '5px solid #ffffff'; envolturaVideo.style.boxSizing = 'border-box'; envolturaVideo.style.backgroundColor = '#ffffff';
 
         videoEl = document.createElement('video');
-        videoEl.src = '../../resources/video/avatarA.mp4'; videoEl.style.width = '100%'; videoEl.style.height = '100%';
+        videoEl.src = new URL('../../video/avatarA.mp4', import.meta.url).href;
+        videoEl.style.width = '100%'; videoEl.style.height = '100%';
         videoEl.style.objectFit = 'cover'; videoEl.style.borderRadius = '50%'; 
         videoEl.muted = true;
         videoEl.loop = true;
+        videoEl.autoplay = true;
+        videoEl.playsInline = true;
 
         imagenEl = document.createElement('img');
-        imagenEl.src = '../../resources/img/avatar.png'; imagenEl.style.width = '100%'; imagenEl.style.height = '100%';
+        imagenEl.src = new URL('../../img/avatar.png', import.meta.url).href;
+        imagenEl.style.width = '100%'; imagenEl.style.height = '100%';
         imagenEl.style.objectFit = 'cover'; imagenEl.style.borderRadius = '50%'; imagenEl.style.display = 'none';
 
         envolturaVideo.appendChild(videoEl); envolturaVideo.appendChild(imagenEl);
@@ -192,6 +197,7 @@ window.avatar = (function() {
         audioEl = document.createElement('audio');
 
         audioEl.onended = () => {
+            if (mantenerVisible) return;
             ocultarAvatar();
             
             // Llama a pasosiguiente() medio segundo (500ms) después de terminar el audio
@@ -210,8 +216,8 @@ window.avatar = (function() {
         burbujaTexto.style.marginLeft = '20px';
         burbujaTexto.style.fontFamily = '"AA Smart Sans", sans-serif'; burbujaTexto.style.borderRadius = '24px 24px 24px 4px';
         burbujaTexto.style.boxShadow = '0 8px 32px rgba(35, 45, 193, 0.168), 0 2px 8px rgba(31, 38, 135, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5)'; burbujaTexto.style.textAlign = 'left';
-        burbujaTexto.style.fontWeight = '600'; burbujaTexto.style.lineHeight = '1.4';
-        burbujaTexto.style.fontSize = '16px';
+        burbujaTexto.style.fontWeight = '400'; burbujaTexto.style.lineHeight = '1.4';
+        burbujaTexto.style.fontSize = '1rem';
         contenedor.appendChild(envolturaVideo); contenedor.appendChild(burbujaTexto); document.body.appendChild(contenedor);
         window.addEventListener('resize', aplicarEstilosResponsivos); aplicarEstilosResponsivos();
     }
@@ -235,9 +241,10 @@ window.avatar = (function() {
         return resultado.replace(/\(([^)]{1,15})\)/g, (match, contenido) => crearIcono(contenido, 'circulo'));
     }
 
-    return function(mensaje, urlAudio) {
+    return function(mensaje, urlAudio, esPersistente = false) {
         inicializarUI();
         if (temporizadorRespaldo) clearTimeout(temporizadorRespaldo);
+        mantenerVisible = Boolean(esPersistente);
 
         burbujaTexto.innerHTML = formatearTextoConIconos(mensaje);
         aplicarSilencioGlobal(); 
@@ -251,9 +258,11 @@ window.avatar = (function() {
             audioEl.play().catch(e => console.log("Audio bloqueado por falta de interacción del usuario", e));
         } else {
             if (videoEl.style.display !== 'none') videoEl.play().catch(e => console.log("Video bloqueado", e));
-            temporizadorRespaldo = setTimeout(() => { 
-                ocultarAvatar(); 
-            }, 4000);
+            if (!mantenerVisible) {
+                temporizadorRespaldo = setTimeout(() => { 
+                    ocultarAvatar(); 
+                }, 4000);
+            }
         }
     };
 })();
