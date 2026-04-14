@@ -27,7 +27,7 @@
       background: var(--bg);
       font-family: 'Barlow', sans-serif;
       color: var(--text);
-      overflow: hidden; /* Previene el scroll global para usar el de los paneles */
+      overflow: hidden;
     }
 
     @keyframes fadeInUp {
@@ -289,7 +289,6 @@
     .right-panel::-webkit-scrollbar-thumb { background: rgba(3, 23, 149, 0.3); border-radius: 6px; }
     .right-panel::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
-    /* Estilos del botón Continuar */
     .btn-continuar {
       position: fixed;
       bottom: 30px;
@@ -325,7 +324,6 @@
       background-color: #021070;
     }
 
-    /* Modificaciones específicas para modo celular */
     @media (max-width: 1024px) {
       .layout {
         grid-template-columns: 1fr;
@@ -472,30 +470,22 @@
   </div>
 </div>
 
-<button id="btnContinuar" class="btn-continuar" onclick="siguientehtml()">Continuar</button>
+<button id="btnContinuar" class="btn-continuar" onclick="window.parent.siguientehtml()">Continuar</button>
+
 <script>
-  // Son 6 items básicos + 1 cuadro grande del EPP específico = 7 puntos a presionar
   const PUNTOS_REQUERIDOS = 7; 
   let puntosPresionados = new Set();
 
   function registrarClic(id, elemento) {
     puntosPresionados.add(id);
     
-    // Le añade una clase visualmente para saber que ya fue presionado (solo a los básicos)
     if(elemento && elemento.classList.contains('epp-item')) {
       elemento.classList.add('clicked');
     }
 
-    // Verificar si ya se presionaron todos los puntos necesarios
     if (puntosPresionados.size === PUNTOS_REQUERIDOS) {
       document.getElementById('btnContinuar').classList.add('show');
     }
-  }
-
-  // --- SOLUCIÓN: Agrega la función que falta aquí ---
-  function siguientehtml() {
-    // Reemplaza 'tu_siguiente_pagina.html' con la ruta real del archivo al que quieres redirigir
-    window.location.href = 'tu_siguiente_pagina.html'; 
   }
 </script>
 
