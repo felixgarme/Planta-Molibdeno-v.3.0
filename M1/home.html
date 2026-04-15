@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modules</title>
+  <style>
+    @font-face {
+      font-family: "AASmartSans";
+      src: url("../Recursos/fonts/AASMARTSANS-REGULAR.TTF") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "AASmartSans";
+      src: url("../Recursos/fonts/AASMARTSANS-SEMIBOLD.TTF") format("truetype");
+      font-weight: 600;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "AASmartSans";
+      src: url("../Recursos/fonts/AASMARTSANS-BOLD.TTF") format("truetype");
+      font-weight: 700;
+      font-style: normal;
+    }
+    :root {
+      --primary: #031795;
+      --bg: #ffffff;
+      --text: #031795;
+      --border: rgba(3, 23, 149, 0.2);
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      --shadow-hover: 0 12px 30px rgba(3, 23, 149, 0.18);
+      --muted: #5d6692;
+      --danger: #ea0606;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "AASmartSans", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 255px 1fr;
+      min-height: 100vh;
+    }
+    .sidebar {
+      background: #ffffff;
+      padding: 26px 22px;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border);
+      box-shadow: 2px 0 16px rgba(3, 23, 149, 0.06);
+    }
+    .brand {
+      margin-bottom: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+    .brand img {
+      width: 100%;
+      max-width: 220px;
+      height: auto;
+      object-fit: contain;
+    }
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .nav-btn {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--primary);
+      padding: 12px 14px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .nav-btn:hover {
+      background: rgba(3, 23, 149, 0.08);
+      color: var(--primary);
+    }
+    .nav-btn.active {
+      background: rgba(3, 23, 149, 0.14);
+      color: var(--primary);
+    }
+    .icon {
+      width: 20px;
+      height: 20px;
+      display: inline-block;
+      flex-shrink: 0;
+      border-radius: 4px;
+      border: 1.8px solid var(--primary);
+      position: relative;
+    }
+    .icon.module::before,
+    .icon.module::after {
+      content: "";
+      position: absolute;
+      background: var(--primary);
+    }
+    .icon.module::before {
+      width: 12px;
+      height: 1.8px;
+      left: 3px;
+      top: 8px;
+    }
+    .icon.module::after {
+      width: 1.8px;
+      height: 12px;
+      left: 8px;
+      top: 3px;
+    }
+    .icon.options {
+      border-radius: 50%;
+      border-width: 1.6px;
+    }
+    .icon.options::before,
+    .icon.options::after {
+      content: "";
+      position: absolute;
+      left: 2px;
+      width: 14px;
+      height: 1.6px;
+      background: var(--primary);
+    }
+    .icon.options::before { top: 6px; }
+    .icon.options::after { top: 11px; }
+
+    .content {
+      background: linear-gradient(165deg, #ffffff 0%, #f5f7ff 60%, #eef2ff 100%);
+      padding: 26px 28px;
+      overflow: hidden;
+    }
+    .panel {
+      display: none;
+      height: 100%;
+    }
+    .panel.active { display: flex; flex-direction: column; }
+    .heading {
+      margin: 0;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 28px;
+      font-weight: 800;
+    }
+    .tabs {
+      margin-top: 16px;
+      display: flex;
+      gap: 38px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      user-select: none;
+    }
+    .tab {
+      border-bottom: 3px solid transparent;
+      padding-bottom: 8px;
+      opacity: 0.75;
+    }
+    .tab.active {
+      opacity: 1;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .sub-title {
+      margin: 20px 0 14px;
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 29px;
+      letter-spacing: 0.5px;
+    }
+    .cards {
+      flex: 1;
+      overflow: auto;
+      padding-right: 8px;
+    }
+    .cards::-webkit-scrollbar { width: 7px; }
+    .cards::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.5);
+      border-radius: 8px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: 36% 64%;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      min-height: 228px;
+    }
+    .card-image {
+      background-image: url("../Recursos/img/home/modulo1.png");
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    .card-image.fire { background-position: center 42%; }
+    .card-image.spill { background-position: center 79%; }
+    .card-body {
+      padding: 24px 24px 16px;
+      display: flex;
+      flex-direction: column;
+    }
+    .card h3 {
+      margin: 0;
+      font-size: 32px;
+      line-height: 1;
+      color: var(--primary);
+      font-weight: 800;
+    }
+    .card p {
+      margin: 12px 0 16px;
+      font-size: 16px;
+      line-height: 1.35;
+      color: #334166;
+      max-width: 95%;
+    }
+    .meta {
+      display: flex;
+      gap: 48px;
+      margin-bottom: 18px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .meta .item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .badge {
+      border-radius: 8px;
+      font-size: 24px;
+      padding: 2px 10px;
+      color: #fff;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+    .green { background: #22b162; }
+    .red { background: #ff5353; }
+    .status.ok { color: #22b162; }
+    .status.fail { color: var(--danger); }
+    .buttons {
+      margin-top: auto;
+      display: flex;
+      gap: 14px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      padding-top: 6px;
+      border-top: 1px solid var(--border);
+    }
+    .pill {
+      border-radius: 999px;
+      border: 2px solid var(--border);
+      height: 42px;
+      min-width: 132px;
+      padding: 0 18px;
+      background: #fff;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 14px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .pill.test {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #fff;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      display: inline-block;
+    }
+    .options-panel {
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+    @media (max-width: 1300px) {
+      .card { grid-template-columns: 40% 60%; }
+      .card h3 { font-size: 34px; }
+      .card p,
+      .meta .item { font-size: 18px; }
+      .badge { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="../Recursos/img/logo.png" alt="Anglo American" />
+      </div>
+      <nav class="nav">
+        <button class="nav-btn active" data-target="modules">
+          <span class="icon module"></span> Modulos
+        </button>
+        <button class="nav-btn" data-target="options">
+          <span class="icon options"></span> Opciones
+        </button>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <section class="panel active" id="modules">
+        <h1 class="heading">Modules</h1>
+        
+        <h2 class="sub-title">1 Modulo</h2>
+        <div class="cards">
+          <article class="card">
+            <div class="card-image fire"></div>
+            <div class="card-body">
+              <h3>Modulo 1: Ingreso a la Planta</h3>
+              <p>
+                Este modulo introduce al participante en el proceso de ingreso seguro a planta,
+                incluyendo control de acceso, validacion de EPP, reconocimiento de senaletica,
+                rutas permitidas y normas esenciales para iniciar labores con seguridad.
+              </p>
+              <div class="meta">
+                <div class="item">Score <span class="badge green">0%</span></div>
+                <div class="item">Test Status <span class="status ok">Disponible</span></div>
+              </div>
+              <div class="buttons">
+                <button class="pill"><span class="dot"></span> Explore</button>
+                <button class="pill"><span class="dot"></span> Practice</button>
+                <button class="pill test"><span class="dot"></span> Test</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel options-panel" id="options">
+        <div>
+          <p>PANEL DE OPCIONES</p>
+          <p style="font-size: 18px; font-weight: 500; opacity: 0.9;">
+            Aqui puedes agregar tus ajustes del modulo.
+          </p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const navButtons = document.querySelectorAll(".nav-btn");
+    const panels = document.querySelectorAll(".panel");
+
+    navButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        navButtons.forEach((item) => item.classList.remove("active"));
+        btn.classList.add("active");
+
+        const id = btn.dataset.target;
+        panels.forEach((panel) => panel.classList.toggle("active", panel.id === id));
+      });
+    });
+  </script>
+</body>
+</html>
