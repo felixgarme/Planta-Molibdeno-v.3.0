@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formato de ingreso a la planta</title>
+    <link rel="stylesheet" href="../Recursos/css/main.css" />
+    <link rel="stylesheet" href="../Recursos/css/formatoIngreso.css" />
+  </head>
+  <body>
+    <main class="page" aria-label="Formato de ingreso a la planta">
+      <section class="panel">
+        <header class="hero">
+          <h1>Formato de ingreso a la planta</h1>
+          <p>Registro visual de ingreso a planta</p>
+        </header>
+        <figure class="image-frame">
+          <div class="image-stack">
+            <img
+              src="../Recursos/img/M1/formatoIngreso/1.png"
+              alt="Formato de registro de ingreso a planta"
+              class="form-image is-active"
+              id="formatoSecuenciaA"
+            />
+            <img
+              src="../Recursos/img/M1/formatoIngreso/1.png"
+              alt=""
+              aria-hidden="true"
+              class="form-image"
+              id="formatoSecuenciaB"
+            />
+          </div>
+          <figcaption class="image-step" id="imageStepLabel" aria-live="polite">Paso 1 de 14</figcaption>
+          <div class="image-actions">
+            <button type="button" class="btn-restart" id="btnReiniciarSecuencia">
+              Ver nuevamente el llenado del formato
+            </button>
+          </div>
+        </figure>
+      </section>
+    </main>
+
+<button id="btnContinuar" class="btn-continuar show" onclick="window.parent.siguientehtml()">Continuar
+    <span class="arrow">❯</span>
+  
+  </button>
+    <script src="../Recursos/js/M1/formatoIngreso.js"></script>
+  </body>
+</html>

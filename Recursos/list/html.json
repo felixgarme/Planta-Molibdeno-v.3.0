@@ -1,6 +1,9 @@
 [
     "./M1/login.html",
     "./M1/Epp.html",
-    "./M1/stickerSeguridad.html"
+    "./M1/eppEspecifico.html",
+    "./M1/stickerSeguridad.html",
+    "./M1/formatoIngreso.html"
+
 
 ]

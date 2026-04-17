@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sticker Seguridad - Detector de Gases</title>
 
+  <link rel="stylesheet" href="../Recursos/css/main.css" />
+
   <style>
     @import url('../Recursos/css/app-fonts.css');
 
@@ -209,8 +211,28 @@
     <img class="frame-image" src="../Recursos/img/footer.png" alt="Pie de pagina">
   </footer>
 
+  <button
+  id="btnContinuarSeccion"
+  type="button"
+  class="btn-continuar show"
+>
+  Continuar
+  <span class="arrow">❯</span>
+</button>
   <script type="module" src="../Recursos/js/tools/avatar.js"></script>
   <script>
+    const btnContinuarSeccion = document.getElementById('btnContinuarSeccion');
+
+    if (btnContinuarSeccion) {
+      btnContinuarSeccion.addEventListener('click', () => {
+        if (window.parent && typeof window.parent.siguientehtml === 'function') {
+          window.parent.siguientehtml();
+          return;
+        }
+        window.location.href = './formatoIngreso.html';
+      });
+    }
+
     window.addEventListener('load', () => {
       // Muestra la burbuja y el video del avatar sin audio.
       setTimeout(() => {

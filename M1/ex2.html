@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chequeo de Ajuste del Respirador</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-light: #d4f0e0;
+    --green-mid: #2db87a;
+    --green-dark: #0d7a52;
+    --green-deep: #074d34;
+    --orange-light: #fde8d8;
+    --orange-mid: #e8703a;
+    --orange-dark: #b84d1e;
+    --orange-deep: #6e2b0a;
+    --neutral-50: #fafaf8;
+    --neutral-100: #f2f1ed;
+    --neutral-200: #e4e2da;
+    --neutral-400: #a8a59c;
+    --neutral-600: #5c5a54;
+    --neutral-800: #2a2926;
+    --neutral-900: #161512;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--neutral-50);
+    color: var(--neutral-800);
+    min-height: 100vh;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* HERO HEADER */
+  .hero {
+    background: var(--neutral-900);
+    color: white;
+    padding: 60px 40px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% -10%, #1a4d38 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease forwards 0.1s;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 46px);
+    line-height: 1.15;
+    color: white;
+    margin-bottom: 14px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease forwards 0.2s;
+  }
+  .hero h1 em {
+    color: var(--green-mid);
+    font-style: normal;
+  }
+  .hero-sub {
+    font-size: 15px;
+    color: #9a9890;
+    font-weight: 300;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeUp 0.5s ease forwards 0.3s;
+  }
+
+  /* TABS */
+  .tabs-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 36px 20px 0;
+    opacity: 0;
+    animation: fadeUp 0.5s ease forwards 0.4s;
+  }
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 50px;
+    border: 1.5px solid var(--neutral-200);
+    background: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--neutral-600);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .tab-btn:hover { border-color: var(--neutral-400); color: var(--neutral-800); }
+  .tab-btn.active-all { background: var(--neutral-800); color: white; border-color: var(--neutral-800); }
+  .tab-btn.active-pos { background: var(--green-light); color: var(--green-deep); border-color: var(--green-mid); }
+  .tab-btn.active-neg { background: var(--orange-light); color: var(--orange-deep); border-color: var(--orange-mid); }
+  .tab-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-pos { background: var(--green-mid); }
+  .dot-neg { background: var(--orange-mid); }
+  .dot-all { background: var(--neutral-400); }
+
+  /* GRID */
+  .cards-section {
+    max-width: 980px;
+    margin: 32px auto 60px;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 24px;
+  }
+
+  /* CARD */
+  .card {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid var(--neutral-200);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    opacity: 0;
+    animation: fadeUp 0.55s ease forwards;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.08); }
+  .card.hidden { display: none; }
+
+  #card-pos { animation-delay: 0.45s; }
+  #card-neg { animation-delay: 0.55s; }
+
+  /* CARD HEADER */
+  .card-head {
+    padding: 22px 24px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid var(--neutral-100);
+  }
+  .card-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 600; flex-shrink: 0;
+  }
+  .num-pos { background: var(--green-light); color: var(--green-deep); }
+  .num-neg { background: var(--orange-light); color: var(--orange-deep); }
+  .card-head-text h2 { font-size: 15px; font-weight: 600; color: var(--neutral-900); margin-bottom: 2px; }
+  .card-head-text span { font-size: 12px; color: var(--neutral-400); font-weight: 400; }
+
+  /* ILLUSTRATION AREA */
+  .illus-wrap {
+    padding: 32px 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .illus-wrap-pos { background: linear-gradient(160deg, #edfaf3 0%, #f6fdf9 100%); }
+  .illus-wrap-neg { background: linear-gradient(160deg, #fef3ec 0%, #fff8f4 100%); }
+
+  .illus-wrap svg { width: 200px; height: 200px; }
+
+  .illus-badge {
+    position: absolute;
+    top: 16px; right: 16px;
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 20px;
+  }
+  .badge-pos { background: var(--green-light); color: var(--green-dark); }
+  .badge-neg { background: var(--orange-light); color: var(--orange-dark); }
+
+  /* CARD BODY */
+  .card-body { padding: 22px 24px; flex: 1; display: flex; flex-direction: column; gap: 14px; }
+
+  .step-block { display: flex; gap: 12px; }
+  .step-icon {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .step-icon-pos { background: var(--green-light); }
+  .step-icon-neg { background: var(--orange-light); }
+  .step-icon svg { width: 14px; height: 14px; }
+  .step-text p { font-size: 14px; line-height: 1.7; color: var(--neutral-600); }
+  .step-text strong { color: var(--neutral-800); font-weight: 500; }
+
+  .result-pill {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    margin-top: 4px;
+  }
+  .result-pill-pos { background: var(--green-light); }
+  .result-pill-neg { background: var(--orange-light); }
+  .check-circle {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .check-pos { background: var(--green-mid); }
+  .check-neg { background: var(--orange-mid); }
+  .result-pill p { font-size: 13px; line-height: 1.65; }
+  .result-pill-pos p { color: var(--green-deep); }
+  .result-pill-neg p { color: var(--orange-deep); }
+
+  /* FOOTER NOTE */
+  .footer-note {
+    max-width: 980px;
+    margin: 0 auto 56px;
+    padding: 0 24px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease forwards 0.7s;
+  }
+  .footer-note-inner {
+    background: var(--neutral-900);
+    border-radius: 16px;
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .alert-icon {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: #2a2926;
+    border: 1.5px solid #3d3b36;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .footer-note-inner p {
+    font-size: 13px; color: #9a9890; line-height: 1.65;
+  }
+  .footer-note-inner p strong { color: white; font-weight: 500; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 44px 24px 36px; }
+    .cards-section { grid-template-columns: 1fr; padding: 0 16px; }
+    .tabs-wrap { flex-wrap: wrap; padding: 28px 16px 0; }
+  }
+</style>
+</head>
+<body>
+
+
+<main class="cards-section">
+
+  <!-- CARD 1: PRESIÓN POSITIVA -->
+  <article class="card" id="card-pos">
+    <div class="card-head">
+      <div class="card-num num-pos">1</div>
+      <div class="card-head-text">
+        <h2>Chequeo con presión positiva</h2>
+        <span>Válvula de exhalación</span>
+      </div>
+    </div>
+
+    <div class="illus-wrap illus-wrap-pos">
+      <span class="illus-badge badge-pos">Exhalar</span>
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Cabeza -->
+        <ellipse cx="100" cy="72" rx="48" ry="55" fill="#c8c5bc"/>
+        <ellipse cx="100" cy="65" rx="41" ry="37" fill="#f0ede6"/>
+        <!-- Ojos -->
+        <ellipse cx="84" cy="58" rx="7" ry="8" fill="#8a8880"/>
+        <ellipse cx="116" cy="58" rx="7" ry="8" fill="#8a8880"/>
+        <ellipse cx="84" cy="57" rx="3.5" ry="4" fill="#1f1e1c"/>
+        <ellipse cx="116" cy="57" rx="3.5" ry="4" fill="#1f1e1c"/>
+        <!-- Nariz -->
+        <path d="M95 68 Q100 76 105 68" stroke="#a8a59c" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- Respirador base -->
+        <rect x="60" y="85" width="80" height="38" rx="14" fill="#2db87a"/>
+        <rect x="64" y="89" width="72" height="30" rx="11" fill="#0d7a52"/>
+        <!-- Válvula central -->
+        <ellipse cx="100" cy="104" rx="16" ry="11" fill="#d4f0e0"/>
+        <ellipse cx="100" cy="104" rx="10" ry="7" fill="#74d4a4"/>
+        <!-- Mano cubriendo -->
+        <ellipse cx="100" cy="108" rx="34" ry="16" fill="#c8a882" opacity="0.85"/>
+        <rect x="68" y="104" width="64" height="16" rx="8" fill="#c8a882" opacity="0.75"/>
+        <!-- Dedos -->
+        <rect x="70" y="96" width="12" height="22" rx="6" fill="#c8a882"/>
+        <rect x="85" y="93" width="12" height="25" rx="6" fill="#d4b490"/>
+        <rect x="100" y="93" width="12" height="25" rx="6" fill="#d4b490"/>
+        <rect x="115" y="96" width="12" height="22" rx="6" fill="#c8a882"/>
+        <!-- Correas -->
+        <rect x="32" y="104" width="30" height="10" rx="5" fill="#a8a59c" opacity="0.6"/>
+        <rect x="138" y="104" width="30" height="10" rx="5" fill="#a8a59c" opacity="0.6"/>
+        <!-- Flechas de expansión -->
+        <path d="M54 88 Q38 80 32 70" stroke="#2db87a" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="4,3"/>
+        <path d="M146 88 Q162 80 168 70" stroke="#2db87a" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="4,3"/>
+        <path d="M30 70 L28 64 M30 70 L36 68" stroke="#2db87a" stroke-width="2" stroke-linecap="round"/>
+        <path d="M170 70 L172 64 M170 70 L164 68" stroke="#2db87a" stroke-width="2" stroke-linecap="round"/>
+        <!-- Label -->
+        <rect x="52" y="150" width="96" height="22" rx="8" fill="#d4f0e0"/>
+        <text x="100" y="165" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#0d7a52" font-weight="600">Cubre la válvula de exhalación</text>
+      </svg>
+    </div>
+
+    <div class="card-body">
+      <div class="step-block">
+        <div class="step-icon step-icon-pos">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M7 1v5m0 0H2m5 0h5" stroke="#0d7a52" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="step-text">
+          <p>Cubra con la mano la abertura de la tapa de la válvula de exhalación. <strong>Exhale suavemente.</strong></p>
+        </div>
+      </div>
+
+      <div class="result-pill result-pill-pos">
+        <div class="check-circle check-pos">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.5 2.5 4-4.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <p>Si la pieza facial <strong>se expande levemente</strong> y no se sienten fugas entre la cara y la pieza, el ajuste es correcto.</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- CARD 2: PRESIÓN NEGATIVA -->
+  <article class="card" id="card-neg">
+    <div class="card-head">
+      <div class="card-num num-neg">2</div>
+      <div class="card-head-text">
+        <h2>Chequeo con presión negativa</h2>
+        <span>Con cartuchos</span>
+      </div>
+    </div>
+
+    <div class="illus-wrap illus-wrap-neg">
+      <span class="illus-badge badge-neg">Inhalar</span>
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Cabeza -->
+        <ellipse cx="100" cy="72" rx="48" ry="55" fill="#c8c5bc"/>
+        <ellipse cx="100" cy="65" rx="41" ry="37" fill="#f0ede6"/>
+        <!-- Ojos -->
+        <ellipse cx="84" cy="58" rx="7" ry="8" fill="#8a8880"/>
+        <ellipse cx="116" cy="58" rx="7" ry="8" fill="#8a8880"/>
+        <ellipse cx="84" cy="57" rx="3.5" ry="4" fill="#1f1e1c"/>
+        <ellipse cx="116" cy="57" rx="3.5" ry="4" fill="#1f1e1c"/>
+        <!-- Nariz -->
+        <path d="M95 68 Q100 76 105 68" stroke="#a8a59c" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- Máscara central -->
+        <rect x="66" y="86" width="68" height="34" rx="12" fill="#74a8c8"/>
+        <rect x="70" y="90" width="60" height="26" rx="9" fill="#4a8aaa"/>
+        <!-- Cartuchos laterales -->
+        <rect x="32" y="85" width="36" height="36" rx="10" fill="#e8703a"/>
+        <rect x="132" y="85" width="36" height="36" rx="10" fill="#e8703a"/>
+        <rect x="36" y="89" width="28" height="28" rx="7" fill="#b84d1e"/>
+        <rect x="136" y="89" width="28" height="28" rx="7" fill="#b84d1e"/>
+        <!-- Detalle cartuchos -->
+        <ellipse cx="50" cy="103" rx="9" ry="7" fill="#993c15" opacity="0.5"/>
+        <ellipse cx="150" cy="103" rx="9" ry="7" fill="#993c15" opacity="0.5"/>
+        <!-- Manos cubriendo cartuchos -->
+        <ellipse cx="50" cy="107" rx="22" ry="12" fill="#c8a882" opacity="0.9"/>
+        <ellipse cx="150" cy="107" rx="22" ry="12" fill="#c8a882" opacity="0.9"/>
+        <!-- Dedos izquierda -->
+        <rect x="28" y="98" width="9" height="18" rx="4.5" fill="#c8a882"/>
+        <rect x="39" y="95" width="9" height="21" rx="4.5" fill="#d4b490"/>
+        <rect x="56" y="95" width="9" height="21" rx="4.5" fill="#d4b490"/>
+        <rect x="67" y="98" width="9" height="18" rx="4.5" fill="#c8a882"/>
+        <!-- Dedos derecha -->
+        <rect x="124" y="98" width="9" height="18" rx="4.5" fill="#c8a882"/>
+        <rect x="136" y="95" width="9" height="21" rx="4.5" fill="#d4b490"/>
+        <rect x="151" y="95" width="9" height="21" rx="4.5" fill="#d4b490"/>
+        <rect x="163" y="98" width="9" height="18" rx="4.5" fill="#c8a882"/>
+        <!-- Flechas contracción hacia dentro -->
+        <path d="M68 103 L80 103" stroke="#fde8d8" stroke-width="2" stroke-linecap="round" marker-end="url(#arr)"/>
+        <path d="M132 103 L120 103" stroke="#fde8d8" stroke-width="2" stroke-linecap="round"/>
+        <defs>
+          <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M0 0 L6 3 L0 6z" fill="#e8703a"/>
+          </marker>
+        </defs>
+        <!-- Label -->
+        <rect x="44" y="150" width="112" height="22" rx="8" fill="#fde8d8"/>
+        <text x="100" y="165" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#b84d1e" font-weight="600">Palmas cubren los cartuchos</text>
+      </svg>
+    </div>
+
+    <div class="card-body">
+      <div class="step-block">
+        <div class="step-icon step-icon-neg">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M7 13V8m0 0H2m5 0h5" stroke="#b84d1e" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="step-text">
+          <p>Cubra los cartuchos con las palmas de las manos para <strong>restringir el flujo de aire</strong>. Inhale suavemente.</p>
+        </div>
+      </div>
+
+      <div class="result-pill result-pill-neg">
+        <div class="check-circle check-neg">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.5 2.5 4-4.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <p>Si la pieza facial <strong>se contrae levemente</strong> y no se sienten fugas entre la cara y la pieza, el ajuste es correcto.</p>
+      </div>
+    </div>
+  </article>
+
+</main>
+
+<section class="footer-note">
+  <div class="footer-note-inner">
+    <div class="alert-icon">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v7M9 13.5v.5" stroke="#2db87a" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="9" r="7.5" stroke="#3d3b36" stroke-width="1.2"/></svg>
+    </div>
+    <p><strong>Importante:</strong> Realice este chequeo antes de ingresar a cualquier área con riesgos respiratorios. Si se detectan fugas, ajuste las correas y repita la prueba. Si persiste la fuga, retire el equipo y consulte a su supervisor de seguridad.</p>
+  </div>
+</section>
+
+<script>
+  const allBtns = document.querySelectorAll('.tab-btn');
+
+  function filter(type, btn) {
+    allBtns.forEach(b => b.className = 'tab-btn');
+
+    const pos = document.getElementById('card-pos');
+    const neg = document.getElementById('card-neg');
+
+    if (type === 'all') {
+      btn.classList.add('active-all');
+      pos.classList.remove('hidden');
+      neg.classList.remove('hidden');
+    } else if (type === 'pos') {
+      btn.classList.add('active-pos');
+      pos.classList.remove('hidden');
+      neg.classList.add('hidden');
+    } else {
+      btn.classList.add('active-neg');
+      pos.classList.add('hidden');
+      neg.classList.remove('hidden');
+    }
+  }
+</script>
+
+</body>
+</html>
