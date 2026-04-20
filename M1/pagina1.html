@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Procedimiento de Ingreso — Planta Molibdeno</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@700;800&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* ───────────────────────────────────────────
+       FONTS
+    ─────────────────────────────────────────── */
+    @font-face {
+      font-family: 'AASmartSans';
+      src: url('../Recursos/fonts/AASMARTSANS-REGULAR.TTF') format('truetype');
+      font-weight: 400; font-style: normal;
+    }
+    @font-face {
+      font-family: 'AASmartSans';
+      src: url('../Recursos/fonts/AASMARTSANS-SEMIBOLD.TTF') format('truetype');
+      font-weight: 600; font-style: normal;
+    }
+    @font-face {
+      font-family: 'AASmartSans';
+      src: url('../Recursos/fonts/AASMARTSANS-BOLD.TTF') format('truetype');
+      font-weight: 700; font-style: normal;
+    }
+
+    /* ───────────────────────────────────────────
+       DESIGN TOKENS
+    ─────────────────────────────────────────── */
+    :root {
+      --blue:      #031795;
+      --blue-sky:  #2a83df;
+      --red:       #ea0606;
+      --green:     #0a8a5a;
+      --muted:     rgba(3,23,149,0.72);
+      --border:    rgba(42,131,223,0.18);
+      --shadow-sm: 0 8px 24px rgba(3,23,149,0.1);
+      --shadow-md: 0 18px 44px rgba(3,23,149,0.15);
+      --radius-sm: 14px;
+      --radius-md: 22px;
+      --radius-lg: 30px;
+      --grad-text: linear-gradient(278deg, #7BDBFF 8.87%, #55b5da 39.24%, #3937bd 44.76%, #ea0606 54.73%, #eda3a4 100.62%);
+      --font:      'AASmartSans','Barlow',system-ui,-apple-system,sans-serif;
+      --font-cond: 'Barlow Condensed','AASmartSans',system-ui,sans-serif;
+      --ease:      0.5s cubic-bezier(0.22,0.61,0.36,1);
+    }
+
+    /* ───────────────────────────────────────────
+       RESET
+    ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      height: 100%;
+      background: #f7fbff url('../Recursos/img/M1/fondo.png') center / cover no-repeat fixed;
+      overflow: hidden;
+    }
+
+    body {
+      height: 100%;
+      background: transparent;
+      font-family: var(--font);
+      color: var(--blue);
+      overflow: hidden;
+    }
+
+    button { font-family: inherit; cursor: pointer; }
+    img    { display: block; max-width: 100%; }
+
+    /* ───────────────────────────────────────────
+       APP SHELL
+    ─────────────────────────────────────────── */
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+      overflow: hidden;
+    }
+
+    /* ───────────────────────────────────────────
+       TOP NAVIGATION
+    ─────────────────────────────────────────── */
+    .top-nav {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 9px;
+      padding: clamp(10px,1.5vh,16px) clamp(16px,2.5vw,32px) 8px;
+      z-index: 20;
+    }
+
+    .progress-track {
+      width: min(480px,88%);
+      height: 4px;
+      background: rgba(3,23,149,0.1);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 33.33%;
+      background: linear-gradient(90deg, var(--blue-sky), var(--blue));
+      border-radius: 99px;
+      transition: width var(--ease);
+    }
+
+    .nav-pills {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .nav-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 17px;
+      border-radius: 99px;
+      border: 1.5px solid rgba(42,131,223,0.22);
+      background: rgba(255,255,255,0.86);
+      backdrop-filter: blur(14px);
+      font-size: clamp(0.7rem,1.1vw,0.84rem);
+      font-weight: 600;
+      color: var(--muted);
+      transition: all 0.27s ease;
+      box-shadow: 0 3px 12px rgba(3,23,149,0.07);
+      white-space: nowrap;
+    }
+
+    .nav-pill .pill-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(42,131,223,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      transition: all 0.27s ease;
+    }
+
+    .nav-pill.active {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+      box-shadow: 0 8px 22px rgba(3,23,149,0.32);
+    }
+
+    .nav-pill.active .pill-num { background: rgba(255,255,255,0.2); color: #fff; }
+    .nav-pill.visited:not(.active) .pill-num { background: rgba(42,131,223,0.18); }
+
+    /* ───────────────────────────────────────────
+       SECTIONS CONTAINER
+    ─────────────────────────────────────────── */
+    .sections-container {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-start;
+      padding: clamp(6px,1vh,12px) clamp(12px,2vw,28px) clamp(4px,0.8vh,10px);
+      opacity: 0;
+      transform: translateX(70px);
+      transition: opacity var(--ease), transform var(--ease);
+      pointer-events: none;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(3,23,149,0.15) transparent;
+    }
+
+    .section::-webkit-scrollbar { width: 4px; }
+    .section::-webkit-scrollbar-thumb { background: rgba(3,23,149,0.18); border-radius: 99px; }
+
+    .section.active   { opacity: 1; transform: translateX(0); pointer-events: auto; }
+    .section.exit-left  { opacity: 0; transform: translateX(-70px); }
+    .section.exit-right { opacity: 0; transform: translateX(70px); }
+
+    .section-inner {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(10px,1.6vh,18px);
+    }
+
+    /* Shared section header */
+    .sec-header {
+      text-align: center;
+      padding-top: clamp(2px,0.5vh,8px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      border-radius: 99px;
+      background: rgba(57,55,189,0.08);
+      border: 1px solid rgba(57,55,189,0.16);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #3937bd;
+      margin-bottom: 9px;
+      opacity: 0;
+      animation: fadeUp 0.55s ease forwards 0.06s;
+    }
+
+    .sec-title {
+      font-size: clamp(20px,3.8vw,36px);
+      font-weight: 700;
+      line-height: 1.1;
+      background: var(--grad-text);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 5px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.14s;
+    }
+
+    .sec-subtitle {
+      font-size: clamp(12px,1.3vw,15px);
+      color: var(--muted);
+      font-weight: 500;
+      line-height: 1.55;
+      max-width: 600px;
+      margin: 0 auto;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.22s;
+    }
+
+    /* ═══════════════════════════════════════════
+       SECTION 1 — INTRODUCCIÓN
+    ═══════════════════════════════════════════ */
+
+    /* Teaser grid */
+    .intro-teasers {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: clamp(10px,1.6vw,18px);
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.3s;
+    }
+
+    .teaser-card {
+      display: flex;
+      align-items: center;
+      gap: clamp(12px,1.6vw,18px);
+      padding: clamp(14px,1.8vw,20px);
+      background: rgba(255,255,255,0.86);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(14px);
+      transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+    }
+
+    .teaser-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(42,131,223,0.3);
+    }
+
+    .teaser-icon {
+      flex-shrink: 0;
+      width: clamp(44px,5.5vw,58px);
+      height: clamp(44px,5.5vw,58px);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(20px,2.5vw,28px);
+    }
+
+    .teaser-card:nth-child(1) .teaser-icon {
+      background: rgba(42,131,223,0.1);
+      border: 1px solid rgba(42,131,223,0.2);
+    }
+
+    .teaser-card:nth-child(2) .teaser-icon {
+      background: rgba(10,138,90,0.09);
+      border: 1px solid rgba(10,138,90,0.2);
+    }
+
+    .teaser-text h3 {
+      font-size: clamp(13px,1.5vw,16px);
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
+
+    .teaser-text p {
+      font-size: clamp(11px,1.1vw,13px);
+      color: var(--muted);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* Intro info note */
+    .intro-note {
+      padding: clamp(14px,1.8vw,20px) clamp(16px,2vw,24px);
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(57,55,189,0.14);
+      border-left: 4px solid #3937bd;
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(12px);
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.42s;
+    }
+
+    .intro-note p {
+      font-size: clamp(12px,1.2vw,14px);
+      color: var(--muted);
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    /* ═══════════════════════════════════════════
+       SECTION 2 — REQUISITOS + MODELO 3D
+    ═══════════════════════════════════════════ */
+    .s2-layout {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(0,1.5fr);
+      gap: clamp(12px,2vw,22px);
+      align-items: stretch;
+    }
+
+    /* Left: requirement cards */
+    .s2-requirements {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(10px,1.4vh,16px);
+      opacity: 0;
+      animation: slideFromLeft 0.68s cubic-bezier(0.22,0.61,0.36,1) forwards 0.24s;
+    }
+
+    .req-card {
+      flex: 1;
+      display: grid;
+      grid-template-columns: clamp(44px,5vw,60px) minmax(0,1fr);
+      gap: clamp(12px,1.5vw,18px);
+      align-items: start;
+      padding: clamp(14px,1.8vw,22px);
+      background: rgba(255,255,255,0.88);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+      transition: transform 0.24s ease, box-shadow 0.24s ease;
+      position: relative;
+    }
+
+    .req-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .req-card.req-1::before { background: linear-gradient(to bottom, var(--blue-sky), var(--blue)); }
+    .req-card.req-2::before { background: linear-gradient(to bottom, #0fd98a, var(--green)); }
+
+    .req-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+
+    .req-num-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding-top: 2px;
+    }
+
+    .req-num {
+      font-family: var(--font-cond);
+      font-size: clamp(30px,3.8vw,46px);
+      font-weight: 800;
+      line-height: 0.9;
+    }
+
+    .req-card.req-1 .req-num { color: var(--blue-sky); }
+    .req-card.req-2 .req-num { color: var(--green); }
+
+    .req-dot-line {
+      width: 2px;
+      flex: 1;
+      min-height: 20px;
+      border-radius: 99px;
+    }
+
+    .req-card.req-1 .req-dot-line { background: rgba(42,131,223,0.18); }
+    .req-card.req-2 .req-dot-line { background: rgba(10,138,90,0.18); }
+
+    .req-body {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .req-body h3 {
+      font-size: clamp(13px,1.5vw,17px);
+      font-weight: 700;
+      color: var(--blue);
+      line-height: 1.2;
+    }
+
+    .req-body p {
+      font-size: clamp(11px,1.1vw,14px);
+      color: var(--muted);
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .req-body strong { color: var(--blue); font-weight: 700; }
+
+    .req-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      width: fit-content;
+    }
+
+    .req-badge-blue {
+      background: rgba(42,131,223,0.1);
+      border: 1px solid rgba(42,131,223,0.22);
+      color: var(--blue);
+    }
+
+    .req-badge-green {
+      background: rgba(10,138,90,0.09);
+      border: 1px solid rgba(10,138,90,0.2);
+      color: var(--green);
+    }
+
+    .req-badge-red {
+      background: rgba(234,6,6,0.08);
+      border: 1px solid rgba(234,6,6,0.18);
+      color: var(--red);
+    }
+
+    /* Right: 3D model */
+    .s2-model {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      animation: slideFromRight 0.68s cubic-bezier(0.22,0.61,0.36,1) forwards 0.34s;
+    }
+
+    .model-halo {
+      position: absolute;
+      inset: 6% 8%;
+      border-radius: 40px;
+      background: radial-gradient(ellipse at 50% 40%, rgba(42,131,223,0.22) 0%, transparent 68%);
+      filter: blur(26px);
+      pointer-events: none;
+    }
+
+    .model-frame {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      min-height: 240px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(236,244,255,0.92));
+      border: 1px solid rgba(42,131,223,0.18);
+      box-shadow: var(--shadow-md);
+    }
+
+    .model-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .model-badge-pill {
+      position: absolute;
+      top: 14px;
+      right: 65px;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 13px;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(42,131,223,0.2);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--blue);
+      box-shadow: 0 4px 14px rgba(3,23,149,0.12);
+    }
+
+    .rotate-icon { animation: rotateSlow 4s linear infinite; display: inline-block; }
+
+    .model-label-pill {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 99px;
+      background: rgba(3,23,149,0.82);
+      backdrop-filter: blur(10px);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      box-shadow: 0 6px 18px rgba(3,23,149,0.3);
+    }
+
+    /* ═══════════════════════════════════════════
+       SECTION 3 — QUIZ VERIFICACIÓN
+    ═══════════════════════════════════════════ */
+    .quiz-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(12px,1.8vh,20px);
+      min-height: 0;
+    }
+
+    /* Progress row */
+    .quiz-progress {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      opacity: 0;
+      animation: fadeUp 0.55s ease forwards 0.28s;
+    }
+
+    .qprog-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .qprog-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(42,131,223,0.2);
+      transition: all 0.35s ease;
+    }
+
+    .qprog-dot.active { background: var(--blue); transform: scale(1.4); }
+    .qprog-dot.done   { background: var(--green); }
+
+    .qprog-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    /* Quiz card */
+    .quiz-card {
+      flex: 1;
+      min-height: 0;
+      padding: clamp(18px,2.5vw,30px) clamp(20px,3vw,36px);
+      background: rgba(255,255,255,0.9);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(14px,2vh,22px);
+      opacity: 0;
+      animation: scaleIn 0.55s cubic-bezier(0.22,0.61,0.36,1) forwards 0.34s;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .quiz-q-num {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #3937bd;
+    }
+
+    .quiz-q-text {
+      font-size: clamp(15px,2vw,20px);
+      font-weight: 700;
+      color: var(--blue);
+      line-height: 1.35;
+    }
+
+    /* Options grid */
+    .quiz-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: clamp(8px,1.2vw,12px);
+    }
+
+    .quiz-opt {
+      padding: clamp(11px,1.5vw,16px) clamp(12px,1.6vw,18px);
+      border-radius: var(--radius-sm);
+      border: 1.5px solid rgba(42,131,223,0.2);
+      background: rgba(247,251,255,0.95);
+      font-size: clamp(12px,1.3vw,15px);
+      font-weight: 600;
+      color: var(--blue);
+      text-align: left;
+      line-height: 1.35;
+      transition: all 0.22s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quiz-opt::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--blue);
+      opacity: 0;
+      transition: opacity 0.22s ease;
+    }
+
+    .quiz-opt span { position: relative; z-index: 1; }
+
+    .quiz-opt:hover:not(:disabled) {
+      border-color: rgba(42,131,223,0.45);
+      background: rgba(237,245,255,0.98);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(3,23,149,0.12);
+    }
+
+    .quiz-opt:disabled { cursor: not-allowed; }
+
+    .quiz-opt.correct {
+      border-color: var(--green);
+      background: rgba(10,138,90,0.09);
+      color: var(--green);
+    }
+
+    .quiz-opt.wrong {
+      border-color: var(--red);
+      background: rgba(234,6,6,0.07);
+      color: var(--red);
+      animation: shake 0.45s ease;
+    }
+
+    .quiz-opt.reveal-correct {
+      border-color: var(--green);
+      background: rgba(10,138,90,0.07);
+      color: var(--green);
+    }
+
+    /* Feedback */
+    .quiz-feedback {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: clamp(10px,1.4vw,14px) clamp(12px,1.6vw,16px);
+      border-radius: var(--radius-sm);
+      font-size: clamp(12px,1.2vw,14px);
+      font-weight: 600;
+      min-height: 0;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .quiz-feedback.show { opacity: 1; transform: translateY(0); }
+
+    .quiz-feedback.correct {
+      background: rgba(10,138,90,0.09);
+      border: 1px solid rgba(10,138,90,0.22);
+      color: var(--green);
+    }
+
+    .quiz-feedback.wrong {
+      background: rgba(234,6,6,0.07);
+      border: 1px solid rgba(234,6,6,0.18);
+      color: var(--red);
+    }
+
+    .feedback-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+    /* Quiz complete banner */
+    .quiz-complete {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: clamp(12px,1.6vw,18px) clamp(16px,2.2vw,22px);
+      background: rgba(10,138,90,0.08);
+      border: 1px solid rgba(10,138,90,0.22);
+      border-radius: var(--radius-sm);
+      font-size: clamp(13px,1.4vw,16px);
+      font-weight: 700;
+      color: var(--green);
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .quiz-complete.show { opacity: 1; transform: scale(1); }
+
+    /* ───────────────────────────────────────────
+       FOOTER: navegación + Continuar (sin solape)
+    ─────────────────────────────────────────── */
+    .app-footer {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: clamp(8px, 1.2vh, 14px);
+      padding: 8px clamp(14px,2vw,28px) clamp(12px,1.8vh,20px);
+      z-index: 20;
+    }
+
+    .bottom-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(10px,2vw,22px);
+      width: 100%;
+      max-width: min(900px, 100%);
+      margin-inline: auto;
+    }
+
+    .ctrl-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px clamp(16px,2vw,26px);
+      border-radius: 99px;
+      border: 1.5px solid rgba(42,131,223,0.26);
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(12px);
+      font-size: clamp(12px,1.3vw,14px);
+      font-weight: 600;
+      color: var(--blue);
+      box-shadow: 0 5px 18px rgba(3,23,149,0.08);
+      transition: all 0.24s ease;
+    }
+
+    .ctrl-btn:hover:not(:disabled) {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+      box-shadow: 0 10px 28px rgba(3,23,149,0.3);
+    }
+
+    .ctrl-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .step-label {
+      flex: 1;
+      text-align: center;
+      font-size: clamp(11px,1.2vw,14px);
+      font-weight: 600;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* Continue */
+    .btn-continuar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: flex-end;
+      gap: 8px;
+      padding: clamp(10px,1.4vh,14px) clamp(20px,3vw,32px);
+      border-radius: 99px;
+      border: 1.5px solid rgba(3,23,149,0.18);
+      background: rgba(248,250,252,0.96);
+      backdrop-filter: blur(16px);
+      font-size: clamp(12px,1.4vw,15px);
+      font-weight: 700;
+      color: var(--blue);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      transition: all 0.34s cubic-bezier(0.25,0.46,0.45,0.94);
+      flex-shrink: 0;
+    }
+
+    .btn-continuar .arrow {
+      font-size: 12px;
+      color: var(--red);
+      font-weight: 800;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-continuar:hover:not(:disabled) {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+      box-shadow: 0 14px 34px rgba(3,23,149,0.32);
+      transform: translateY(-2px);
+    }
+
+    .btn-continuar:hover:not(:disabled) .arrow { color: #fff; transform: translateX(4px); }
+    .btn-continuar:disabled { opacity: 0.46; cursor: not-allowed; }
+
+    /* ───────────────────────────────────────────
+       ANIMATIONS
+    ─────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideFromLeft {
+      from { opacity: 0; transform: translateX(-44px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideFromRight {
+      from { opacity: 0; transform: translateX(44px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.94) translateY(16px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes rotateSlow {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-7px); }
+      40%      { transform: translateX(7px); }
+      60%      { transform: translateX(-5px); }
+      80%      { transform: translateX(5px); }
+    }
+
+    @keyframes pulseGreen {
+      0%,100% { box-shadow: 0 0 0 0 rgba(10,138,90,0.3); }
+      50%      { box-shadow: 0 0 0 8px rgba(10,138,90,0); }
+    }
+
+    /* ───────────────────────────────────────────
+       RESPONSIVE
+    ─────────────────────────────────────────── */
+    @media (max-width: 820px) {
+      .s2-layout      { grid-template-columns: 1fr; }
+      .s2-model       { min-height: 220px; }
+      .intro-teasers  { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 540px) {
+      .nav-pill .pill-label { display: none; }
+      .quiz-options { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- ── TOP NAV ──────────────────────────────── -->
+  <header class="top-nav" role="banner">
+    <div class="progress-track" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="3" aria-label="Progreso del módulo">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <nav class="nav-pills" aria-label="Navegar entre secciones">
+      <button class="nav-pill active" data-nav="0" type="button" aria-current="page">
+        <span class="pill-num" aria-hidden="true">1</span>
+        <span class="pill-label">Introducción</span>
+      </button>
+      <button class="nav-pill" data-nav="1" type="button">
+        <span class="pill-num" aria-hidden="true">2</span>
+        <span class="pill-label">Requisitos</span>
+      </button>
+      <button class="nav-pill" data-nav="2" type="button">
+        <span class="pill-num" aria-hidden="true">3</span>
+        <span class="pill-label">Verificación</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ── SECTIONS ─────────────────────────────── -->
+  <div class="sections-container" id="sectionsContainer">
+
+    <!-- ══════════════════════════════════════
+         SECCIÓN 1 · INTRODUCCIÓN
+    ══════════════════════════════════════ -->
+    <section class="section active" id="sec-0" data-section="0" aria-label="Introducción al procedimiento de ingreso">
+      <div class="section-inner">
+
+        <header class="sec-header">
+          <p class="eyebrow">Módulo 1 · Procedimiento de Ingreso</p>
+          <h1 class="sec-title">Ingreso a Planta Molibdeno</h1>
+          <p class="sec-subtitle">
+            Para ingresar a la Planta de Molibdeno debes cumplir con requisitos
+            específicos de seguridad y autorización. Aquí aprenderás qué necesitas.
+          </p>
+        </header>
+
+        <div class="intro-teasers">
+          <div class="teaser-card">
+           
+            <div class="teaser-text">
+              <h3>Curso de ingreso obligatorio</h3>
+              <p>Asistir y aprobar con nota mínima del 90%.</p>
+            </div>
+          </div>
+          <div class="teaser-card">
+            
+            <div class="teaser-text">
+              <h3>Sticker de autorización</h3>
+              <p>Debe estar en la parte posterior del casco.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="intro-note">
+          <p>
+            El procedimiento de ingreso a la Planta de Molibdeno tiene como objetivo
+            garantizar que todo el personal cuente con el conocimiento básico de seguridad
+            necesario para operar de forma segura dentro de las instalaciones.
+            Navega por las siguientes secciones para conocer los requisitos detallados
+            y luego verifica tu aprendizaje con las preguntas de la sección de verificación.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         SECCIÓN 2 · REQUISITOS + MODELO 3D
+    ══════════════════════════════════════ -->
+    <section class="section" id="sec-1" data-section="1" aria-label="Requisitos de ingreso y modelo 3D del casco" aria-hidden="true">
+      <div class="section-inner">
+
+        <header class="sec-header">
+          <p class="eyebrow">Procedimiento de ingreso · N.° 1</p>
+          <h1 class="sec-title">Requisitos para Ingresar</h1>
+          <p class="sec-subtitle">
+            Ambos requisitos son obligatorios y deben cumplirse antes de ingresar al área.
+          </p>
+        </header>
+
+        <div class="s2-layout">
+
+          <!-- Requirement cards -->
+          <div class="s2-requirements">
+
+            <div class="req-card req-1">
+              <div class="req-num-wrap">
+                <div class="req-num">01</div>
+                <div class="req-dot-line"></div>
+              </div>
+              <div class="req-body">
+                <h3>Curso "Ingreso a Planta Molibdeno"</h3>
+                <p>
+                  Asistir y aprobar el curso de
+                  <strong>"Ingreso a Planta Molibdeno"</strong>.
+                  La aprobación debe ser igual o mayor al 90%.
+                </p>
+                <div class="req-badge req-badge-blue">✓ Aprobación ≥ 90%</div>
+              </div>
+            </div>
+
+            <div class="req-card req-2">
+              <div class="req-num-wrap">
+                <div class="req-num">02</div>
+                <div class="req-dot-line"></div>
+              </div>
+              <div class="req-body">
+                <h3>Sticker de Autorización en el Casco</h3>
+                <p>
+                  Mantener en la <strong>parte posterior del casco</strong> el
+                  sticker de aprobación del curso
+                  <strong>"PLANTA MOLIBDENO – PERSONAL AUTORIZADO"</strong>,
+                  válido para ingreso a Planta de Molibdeno.
+                </p>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                  <span class="req-badge req-badge-green"> Parte posterior del casco</span>
+                  <span class="req-badge req-badge-red">⚠ Uso obligatorio</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 3D Model -->
+          <div class="s2-model">
+            <div class="model-halo" aria-hidden="true"></div>
+            <div class="model-frame">
+              <div class="model-badge-pill" aria-hidden="true" style="">
+                <span class="rotate-icon">↻</span>
+                Modelo 3D Interactivo
+              </div>
+              <iframe
+                id="modelIframe"
+                src="../Epp/Epp.html"
+                title="Modelo 3D del casco de seguridad — arrastra para explorar"
+                loading="lazy"
+                
+              ></iframe>
+             
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         SECCIÓN 3 · QUIZ VERIFICACIÓN
+    ══════════════════════════════════════ -->
+    <section class="section" id="sec-2" data-section="2" aria-label="Verificación de conocimiento" aria-hidden="true">
+      <div class="section-inner">
+
+        <header class="sec-header">
+          <p class="eyebrow">Verifica tu conocimiento</p>
+          <h1 class="sec-title">¿Qué aprendiste?</h1>
+          <p class="sec-subtitle">
+            Responde las siguientes preguntas. Debes acertar todas para continuar.
+          </p>
+        </header>
+
+        <div class="quiz-container" id="quizContainer">
+
+          <!-- Question progress -->
+          <div class="quiz-progress" id="quizProgress">
+            <div class="qprog-dots">
+              <div class="qprog-dot active" id="qdot-0" aria-hidden="true"></div>
+              <div class="qprog-dot"        id="qdot-1" aria-hidden="true"></div>
+              <div class="qprog-dot"        id="qdot-2" aria-hidden="true"></div>
+            </div>
+            <span class="qprog-label" id="qprogLabel" aria-live="polite">Pregunta 1 de 3</span>
+          </div>
+
+          <!-- Quiz card (single, content swapped via JS) -->
+          <div class="quiz-card" id="quizCard" role="form" aria-label="Pregunta actual">
+            <div class="quiz-q-num" id="qNum">Pregunta 1 de 3</div>
+            <div class="quiz-q-text" id="qText" aria-live="polite"></div>
+            <div class="quiz-options" id="qOptions" role="radiogroup" aria-label="Opciones de respuesta"></div>
+            <div class="quiz-feedback" id="qFeedback" aria-live="polite" role="alert"></div>
+          </div>
+
+          <!-- All correct banner -->
+          <div class="quiz-complete" id="quizComplete" aria-live="polite">
+            <span aria-hidden="true">🎉</span>
+            <span>¡Excelente! Has respondido correctamente todas las preguntas. Ya puedes continuar.</span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /sections-container -->
+
+  <footer class="app-footer">
+    <nav class="bottom-controls" aria-label="Controles de navegación">
+      <button class="ctrl-btn" id="btnPrev" type="button" disabled aria-label="Sección anterior">← Atrás</button>
+      <p class="step-label" id="stepLabel" aria-live="polite" aria-atomic="true">Sección 1 de 3 · Introducción</p>
+      <button class="ctrl-btn" id="btnNext" type="button" aria-label="Siguiente sección">Siguiente →</button>
+    </nav>
+
+    <button
+      class="btn-continuar"
+      id="btnContinuar"
+      type="button"
+      disabled
+      aria-label="Continuar (responde correctamente todas las preguntas para habilitar)"
+    >
+      Continuar
+      <span class="arrow" aria-hidden="true">❯</span>
+    </button>
+  </footer>
+
+</div><!-- /app -->
+
+<script>
+(() => {
+  'use strict';
+
+  /* ── Section navigation ───────────────────── */
+  const TOTAL = 3;
+  const NAMES = ['Introducción', 'Requisitos', 'Verificación'];
+
+  let current = 0;
+  const visited = [true, false, false];
+
+  const sections    = Array.from(document.querySelectorAll('.section'));
+  const navPills    = Array.from(document.querySelectorAll('.nav-pill'));
+  const progressFill = document.getElementById('progressFill');
+  const btnPrev     = document.getElementById('btnPrev');
+  const btnNext     = document.getElementById('btnNext');
+  const stepLabel   = document.getElementById('stepLabel');
+  const btnContinuar = document.getElementById('btnContinuar');
+  const modelIframe  = document.getElementById('modelIframe');
+
+  function goTo(next, dir) {
+    if (next < 0 || next >= TOTAL || next === current) return;
+    const prev = current;
+    current = next;
+    visited[current] = true;
+
+    const exitClass  = dir === 'next' ? 'exit-left' : 'exit-right';
+    const inFrom     = dir === 'next' ? 'translateX(70px)' : 'translateX(-70px)';
+
+    sections[prev].classList.remove('active');
+    sections[prev].classList.add(exitClass);
+    sections[prev].setAttribute('aria-hidden', 'true');
+
+    sections[current].style.transition = 'none';
+    sections[current].style.transform  = inFrom;
+    sections[current].style.opacity    = '0';
+    sections[current].offsetHeight;
+    sections[current].style.transition = '';
+    sections[current].style.transform  = '';
+    sections[current].style.opacity    = '';
+
+    replayAnimations(sections[current]);
+    sections[current].classList.add('active');
+    sections[current].removeAttribute('aria-hidden');
+
+    setTimeout(() => sections[prev].classList.remove('exit-left', 'exit-right'), 540);
+
+    /* Trigger 3D casco on section 2 */
+    if (current === 1) triggerCascoModel();
+
+    /* Render quiz on section 3 */
+    if (current === 2) renderQuestion(quizState.current);
+
+    updateNavUI();
+  }
+
+  function replayAnimations(sec) {
+    const els = sec.querySelectorAll(
+      '.eyebrow, .sec-title, .sec-subtitle, ' +
+      '.intro-teasers, .intro-note, ' +
+      '.s2-requirements, .s2-model, ' +
+      '.quiz-progress, .quiz-card, .quiz-complete'
+    );
+    els.forEach(el => { el.style.animation = 'none'; el.offsetHeight; el.style.animation = ''; });
+  }
+
+  function updateNavUI() {
+    progressFill.style.width = `${((current + 1) / TOTAL) * 100}%`;
+    document.querySelector('.progress-track').setAttribute('aria-valuenow', String(current + 1));
+
+    navPills.forEach((pill, i) => {
+      pill.classList.toggle('active',  i === current);
+      pill.classList.toggle('visited', visited[i]);
+      pill.setAttribute('aria-current', i === current ? 'page' : 'false');
+    });
+
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === TOTAL - 1;
+    stepLabel.textContent = `Sección ${current + 1} de ${TOTAL} · ${NAMES[current]}`;
+  }
+
+  btnPrev.addEventListener('click', () => goTo(current - 1, 'prev'));
+  btnNext.addEventListener('click', () => goTo(current + 1, 'next'));
+
+  navPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const t = parseInt(pill.dataset.nav, 10);
+      goTo(t, t > current ? 'next' : 'prev');
+    });
+  });
+
+  /* ── 3D Model — trigger casco ──────────────── */
+  function triggerCascoModel() {
+    /* Try to call the casco procedure after the iframe loads */
+    const tryActivate = () => {
+      try {
+        const cw = modelIframe.contentWindow;
+        if (cw && cw.v3d && cw.v3d.puzzles && typeof cw.v3d.puzzles.procedures['casco'] === 'function') {
+          cw.v3d.puzzles.procedures['casco']();
+        }
+      } catch (e) { /* silent — model still shows */ }
+    };
+
+    if (modelIframe.contentDocument && modelIframe.contentDocument.readyState === 'complete') {
+      setTimeout(tryActivate, 800);
+    } else {
+      modelIframe.addEventListener('load', () => setTimeout(tryActivate, 1200), { once: true });
+    }
+  }
+
+  /* ── Quiz Logic ────────────────────────────── */
+  const QUESTIONS = [
+    {
+      text: '¿Cuál es el porcentaje mínimo de aprobación para el curso de ingreso a la Planta Molibdeno?',
+      options: ['80 %', '85 %', '90 %', '95 %'],
+      correct: 2,
+    },
+    {
+      text: '¿En qué parte del casco debe colocarse el sticker de autorización de ingreso?',
+      options: ['Parte frontal', 'Parte lateral', 'Parte superior', 'Parte posterior'],
+      correct: 3,
+    },
+    {
+      text: '¿Cuál es el texto que lleva el sticker de autorización para ingresar a la planta?',
+      options: [
+        'ZONA RESTRINGIDA',
+        'PERSONAL DE TURNO',
+        'PLANTA MOLIBDENO – PERSONAL AUTORIZADO',
+        'ÁREA DE TRABAJO SEGURO',
+      ],
+      correct: 2,
+    },
+  ];
+
+  const quizState = {
+    current:   0,
+    answered:  [false, false, false], /* all must be true to unlock continue */
+    locked:    [false, false, false], /* locked after correct answer */
+  };
+
+  const qNum      = document.getElementById('qNum');
+  const qText     = document.getElementById('qText');
+  const qOptions  = document.getElementById('qOptions');
+  const qFeedback = document.getElementById('qFeedback');
+  const qprogLabel = document.getElementById('qprogLabel');
+  const quizComplete = document.getElementById('quizComplete');
+
+  function renderQuestion(idx) {
+    const q = QUESTIONS[idx];
+    const n = idx + 1;
+
+    qNum.textContent  = `Pregunta ${n} de ${QUESTIONS.length}`;
+    qText.textContent = q.text;
+    qprogLabel.textContent = `Pregunta ${n} de ${QUESTIONS.length}`;
+
+    /* Dots */
+    QUESTIONS.forEach((_, i) => {
+      const dot = document.getElementById(`qdot-${i}`);
+      if (!dot) return;
+      dot.classList.toggle('active', i === idx);
+      dot.classList.toggle('done',   quizState.answered[i] && i !== idx);
+    });
+
+    /* Options */
+    qOptions.innerHTML = '';
+    q.options.forEach((text, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'quiz-opt';
+      btn.innerHTML = `<span>${text}</span>`;
+      btn.dataset.idx = i;
+      btn.disabled = quizState.locked[idx];
+
+      if (quizState.locked[idx]) {
+        /* Show result state */
+        if (i === q.correct) btn.classList.add('correct');
+      }
+
+      btn.addEventListener('click', () => handleAnswer(idx, i, btn));
+      qOptions.appendChild(btn);
+    });
+
+    /* Feedback */
+    qFeedback.className = 'quiz-feedback';
+    qFeedback.innerHTML = '';
+    if (quizState.locked[idx]) {
+      showFeedback(true, '¡Correcto! Puedes avanzar a la siguiente pregunta.');
+    }
+  }
+
+  function handleAnswer(qIdx, optIdx, btn) {
+    if (quizState.locked[qIdx]) return;
+
+    const q = QUESTIONS[qIdx];
+    const isCorrect = optIdx === q.correct;
+    const opts = Array.from(qOptions.querySelectorAll('.quiz-opt'));
+
+    opts.forEach(o => { o.disabled = true; });
+
+    if (isCorrect) {
+      btn.classList.add('correct');
+      showFeedback(true, '¡Correcto! Muy bien.');
+      quizState.answered[qIdx] = true;
+      quizState.locked[qIdx]   = true;
+
+      /* Update dots */
+      const dot = document.getElementById(`qdot-${qIdx}`);
+      if (dot) { dot.classList.remove('active'); dot.classList.add('done'); }
+
+      const allDone = quizState.answered.every(Boolean);
+      if (allDone) {
+        setTimeout(() => {
+          quizComplete.classList.add('show');
+          btnContinuar.disabled = false;
+          btnContinuar.setAttribute('aria-label', 'Continuar al siguiente contenido');
+          btnContinuar.style.animation = 'pulseGreen 1.2s ease 2';
+        }, 800);
+      } else {
+        /* Auto-advance to next unanswered question */
+        const nextUnanswered = quizState.answered.findIndex(a => !a);
+        if (nextUnanswered !== -1) {
+          setTimeout(() => {
+            quizState.current = nextUnanswered;
+            const dot2 = document.getElementById(`qdot-${nextUnanswered}`);
+            if (dot2) dot2.classList.add('active');
+            renderQuestion(nextUnanswered);
+          }, 1000);
+        }
+      }
+    } else {
+      btn.classList.add('wrong');
+      /* Reveal correct answer */
+      opts[q.correct].classList.add('reveal-correct');
+      showFeedback(false, 'Incorrecto. Observa la respuesta correcta e inténtalo de nuevo.');
+
+      /* Re-enable after 2s (reset wrong styling) */
+      setTimeout(() => {
+        opts.forEach(o => {
+          o.disabled = false;
+          o.classList.remove('wrong', 'reveal-correct', 'correct');
+        });
+        qFeedback.className = 'quiz-feedback';
+        qFeedback.innerHTML = '';
+      }, 2000);
+    }
+  }
+
+  function showFeedback(isCorrect, msg) {
+    qFeedback.innerHTML = `<span class="feedback-icon">${isCorrect ? '✓' : '✗'}</span> ${msg}`;
+    qFeedback.className = `quiz-feedback ${isCorrect ? 'correct' : 'wrong'} show`;
+  }
+
+  /* ── Continue button ───────────────────────── */
+  const normPath = v =>
+    String(v||'').replace(/\\/g,'/').replace(/^\.?\//,'/').replace(/\/{2,}/g,'/').toLowerCase();
+
+  const findPageIdx = pages => {
+    const cur = normPath(window.location.pathname);
+    let idx = pages.findIndex(p => cur.endsWith(normPath(p)));
+    if (idx !== -1) return idx;
+    const file = cur.split('/').pop();
+    return file ? pages.findIndex(p => normPath(p).split('/').pop() === file) : -1;
+  };
+
+  btnContinuar.addEventListener('click', async () => {
+    if (btnContinuar.disabled) return;
+    if (window.parent && typeof window.parent.siguientehtml === 'function') {
+      window.parent.siguientehtml();
+      return;
+    }
+    try {
+      const res = await fetch('../Recursos/list/html.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error();
+      const pages = await res.json();
+      if (!Array.isArray(pages) || !pages.length) return;
+      const idx  = findPageIdx(pages);
+      const next = pages[idx + 1];
+      if (next) {
+        const clean = `/${String(next).replace(/\\/g,'/').replace(/^\.?\//,'').replace(/^\/+/,'')}`;
+        window.location.href = window.location.origin + clean;
+      }
+    } catch { /* silent */ }
+  });
+
+  /* ── Init ──────────────────────────────────── */
+  updateNavUI();
+})();
+</script>
+
+</body>
+</html>
