@@ -16,7 +16,9 @@ import("../../../Recursos/js/tools/ocultar.js")
         "Object002",
         "11_MascaraSiliconada",
         "Object0021",
-        "stiker"
+        "sticker",
+        "detector"
+
         
       ];
 
