@@ -8,7 +8,7 @@
       <field name="FADE_ANNOTATIONS">TRUE</field>
     </block>
   </tab>
-  <tab name="Inicio" type="CommonTab" active="false" scrollx="-177.3607177734375" scrolly="-226" scale="1">
+  <tab name="Inicio" type="CommonTab" active="true" scrollx="288.8473205566406" scrolly="-136" scale="1">
     <block xmlns="https://developers.google.com/blockly/xml" type="connectorSlot" id=":?iCqso=7:``4PwS]KC)" x="176" y="53">
       <statement name="DO">
         <block type="procedures_callnoreturn" id="-|?QdV8$6UWm{@TVWWt#" disabled="true">
@@ -42,7 +42,7 @@
         </block>
       </statement>
     </block>
-    <block xmlns="https://developers.google.com/blockly/xml" type="procedures_defnoreturn" id="=$T~@K$hySpC^m}2vjvg" disabled="true" x="168" y="376">
+    <block xmlns="https://developers.google.com/blockly/xml" type="procedures_defnoreturn" id="=$T~@K$hySpC^m}2vjvg" disabled="true" x="172" y="310">
       <field name="NAME">loop inicio</field>
       <comment pinned="false" h="80" w="160">Describe this function...</comment>
       <statement name="STACK">
@@ -81,7 +81,7 @@
         </block>
       </statement>
     </block>
-    <block xmlns="https://developers.google.com/blockly/xml" type="tweenCameraExt" id="a.6UiC@cbaDGZ7@wCJ;o" x="181" y="576">
+    <block xmlns="https://developers.google.com/blockly/xml" type="tweenCameraExt" id="a.6UiC@cbaDGZ7@wCJ;o" x="170" y="536">
       <mutation xmlns="http://www.w3.org/1999/xhtml" whenfinishedslot="true"></mutation>
       <field name="MOVEMENT_TYPE">SPHERICAL</field>
       <value name="POSITION">
@@ -101,7 +101,7 @@
       </value>
     </block>
   </tab>
-  <tab name="Mostrar" type="CommonTab" active="true" scrollx="1615.0386505126953" scrolly="1609.25" scale="1">
+  <tab name="Mostrar" type="CommonTab" active="false" scrollx="1545.0386505126953" scrolly="-293.25" scale="1">
     <block xmlns="https://developers.google.com/blockly/xml" type="procedures_defnoreturn" id="qHUEX`%:0CtXN[OSALbF" x="-1006" y="-1380">
       <field name="NAME">sticker</field>
       <comment pinned="false" h="80" w="160">Describe this function...</comment>
