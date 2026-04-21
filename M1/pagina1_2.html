@@ -248,167 +248,87 @@
        SECTION 1 — INTRODUCCIÓN
     ═══════════════════════════════════════════ */
 
-    .sec-0 .sec-header {
-      text-align: left;
-      max-width: none;
-    }
-
-    .sec-0 .sec-subtitle {
-      margin: 0;
-      max-width: min(900px, 100%);
-    }
-
-    .intro-main {
-      display: grid;
-      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
-      gap: clamp(12px, 1.8vw, 22px);
-      align-items: stretch;
-      min-height: clamp(260px, 42vh, 460px);
-    }
-
+    /* Teaser grid */
     .intro-teasers {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: clamp(10px, 1.4vw, 16px);
-      align-content: stretch;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: clamp(10px,1.6vw,18px);
       opacity: 0;
       animation: fadeUp 0.6s ease forwards 0.3s;
     }
 
     .teaser-card {
-      position: relative;
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 10px;
-      padding: clamp(16px, 1.9vw, 24px);
-      background: linear-gradient(156deg, rgba(255,255,255,0.96), rgba(241,248,255,0.9));
-      border: 1px solid rgba(42,131,223,0.22);
+      align-items: center;
+      gap: clamp(12px,1.6vw,18px);
+      padding: clamp(14px,1.8vw,20px);
+      background: rgba(255,255,255,0.86);
+      border: 1px solid var(--border);
       border-radius: var(--radius-md);
       box-shadow: var(--shadow-sm);
-      backdrop-filter: blur(10px);
-      overflow: hidden;
+      backdrop-filter: blur(14px);
       transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
     }
 
-    .teaser-card::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, var(--blue-sky), var(--blue));
-      opacity: 0.85;
-    }
-
-    .teaser-card:nth-child(2)::before {
-      background: linear-gradient(90deg, #08b879, var(--green));
-    }
-
     .teaser-card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-4px);
       box-shadow: var(--shadow-md);
-      border-color: rgba(42,131,223,0.32);
+      border-color: rgba(42,131,223,0.3);
     }
 
-    .teaser-tag {
-      display: inline-flex;
-      width: fit-content;
-      padding: 5px 10px;
-      border-radius: 99px;
-      font-size: 0.7rem;
-      letter-spacing: 0.08em;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #fff;
-      background: linear-gradient(120deg, var(--blue-sky), var(--blue));
+    .teaser-icon {
+      flex-shrink: 0;
+      width: clamp(44px,5.5vw,58px);
+      height: clamp(44px,5.5vw,58px);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(20px,2.5vw,28px);
     }
 
-    .teaser-card:nth-child(2) .teaser-tag {
-      background: linear-gradient(120deg, #0fcf8b, var(--green));
+    .teaser-card:nth-child(1) .teaser-icon {
+      background: rgba(42,131,223,0.1);
+      border: 1px solid rgba(42,131,223,0.2);
+    }
+
+    .teaser-card:nth-child(2) .teaser-icon {
+      background: rgba(10,138,90,0.09);
+      border: 1px solid rgba(10,138,90,0.2);
     }
 
     .teaser-text h3 {
-      font-size: clamp(15px, 1.5vw, 19px);
+      font-size: clamp(13px,1.5vw,16px);
       font-weight: 700;
       color: var(--blue);
-      margin-bottom: 6px;
-      line-height: 1.25;
+      margin-bottom: 4px;
     }
 
     .teaser-text p {
-      font-size: clamp(12px, 1.15vw, 14px);
+      font-size: clamp(11px,1.1vw,13px);
       color: var(--muted);
       font-weight: 500;
-      line-height: 1.55;
+      line-height: 1.4;
     }
 
-    .teaser-image {
-      width: 100%;
-      aspect-ratio: 16 / 8;
-      object-fit: cover;
-      border-radius: 12px;
-      border: 1px solid rgba(42,131,223,0.2);
-      background: rgba(255,255,255,0.6);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.28);
-    }
-
+    /* Intro info note */
     .intro-note {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: clamp(10px, 1.4vh, 16px);
-      padding: clamp(16px, 2vw, 24px);
-      background: rgba(255,255,255,0.86);
-      border: 1px solid rgba(57,55,189,0.2);
-      border-radius: var(--radius-md);
+      padding: clamp(14px,1.8vw,20px) clamp(16px,2vw,24px);
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(57,55,189,0.14);
+      border-left: 4px solid #3937bd;
+      border-radius: var(--radius-sm);
       box-shadow: var(--shadow-sm);
       backdrop-filter: blur(12px);
       opacity: 0;
       animation: fadeUp 0.6s ease forwards 0.42s;
     }
 
-    .intro-note h3 {
-      font-size: clamp(16px, 1.6vw, 20px);
-      color: var(--blue);
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
     .intro-note p {
-      font-size: clamp(12px, 1.15vw, 14px);
+      font-size: clamp(12px,1.2vw,14px);
       color: var(--muted);
       line-height: 1.65;
       font-weight: 500;
-    }
-
-    .intro-list {
-      list-style: none;
-      display: grid;
-      gap: 8px;
-    }
-
-    .intro-list li {
-      position: relative;
-      padding-left: 18px;
-      font-size: clamp(11px, 1.05vw, 13px);
-      color: var(--blue);
-      font-weight: 600;
-      line-height: 1.45;
-    }
-
-    .intro-list li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0.58em;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--red), #ff7373);
-      box-shadow: 0 0 0 3px rgba(234,6,6,0.12);
-      transform: translateY(-50%);
     }
 
     /* ═══════════════════════════════════════════
@@ -947,7 +867,6 @@
     @media (max-width: 820px) {
       .s2-layout      { grid-template-columns: 1fr; }
       .s2-model       { min-height: 220px; }
-      .intro-main     { grid-template-columns: 1fr; min-height: auto; }
       .intro-teasers  { grid-template-columns: 1fr; }
     }
 
@@ -970,16 +889,20 @@
 
   <!-- ── TOP NAV ──────────────────────────────── -->
   <header class="top-nav" role="banner">
-    <div class="progress-track" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="2" aria-label="Progreso del módulo">
+    <div class="progress-track" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="3" aria-label="Progreso del módulo">
       <div class="progress-fill" id="progressFill"></div>
     </div>
     <nav class="nav-pills" aria-label="Navegar entre secciones">
       <button class="nav-pill active" data-nav="0" type="button" aria-current="page">
         <span class="pill-num" aria-hidden="true">1</span>
-        <span class="pill-label">Requisitos</span>
+        <span class="pill-label">Introducción</span>
       </button>
       <button class="nav-pill" data-nav="1" type="button">
         <span class="pill-num" aria-hidden="true">2</span>
+        <span class="pill-label">Requisitos</span>
+      </button>
+      <button class="nav-pill" data-nav="2" type="button">
+        <span class="pill-num" aria-hidden="true">3</span>
         <span class="pill-label">Verificación</span>
       </button>
     </nav>
@@ -989,17 +912,68 @@
   <div class="sections-container" id="sectionsContainer">
 
     <!-- ══════════════════════════════════════
+         SECCIÓN 1 · INTRODUCCIÓN
+    ══════════════════════════════════════ -->
+    <section class="section active" id="sec-0" data-section="0" aria-label="Introducción al procedimiento de ingreso">
+      <div class="section-inner">
+
+        <header class="sec-header">
+          <p class="eyebrow">Módulo 1 · Procedimiento de Ingreso</p>
+          <h1 class="sec-title">Ingreso a Planta Molibdeno</h1>
+          <p class="sec-subtitle">
+            Para ingresar a la Planta de Molibdeno debes cumplir con requisitos
+            específicos de seguridad y autorización. Aquí aprenderás qué necesitas.
+          </p>
+        </header>
+
+        <div class="intro-teasers">
+          <div class="teaser-card">
+           
+            <div class="teaser-text">
+              <h3>Curso de ingreso obligatorio</h3>
+              <p>Asistir y aprobar con nota mínima del 90%.</p>
+            </div>
+          </div>
+          <div class="teaser-card">
+            
+            <div class="teaser-text">
+              <h3>Sticker de autorización</h3>
+              <p>Debe estar en la parte posterior del casco.</p>
+              <iframe src="../Casco/Casco.html" frameborder="0"></iframe>
+            <style>
+              iframe {
+                aspect-ratio: 1;
+                width: 100%;
+                height: auto;
+              }
+            </style>
+            </div>
+          </div>
+        </div>
+
+        <div class="intro-note">
+          <p>
+            El procedimiento de ingreso a la Planta de Molibdeno tiene como objetivo
+            garantizar que todo el personal cuente con el conocimiento básico de seguridad
+            necesario para operar de forma segura dentro de las instalaciones.
+            Navega por las siguientes secciones para conocer los requisitos detallados
+            y luego verifica tu aprendizaje con las preguntas de la sección de verificación.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
          SECCIÓN 2 · REQUISITOS + MODELO 3D
     ══════════════════════════════════════ -->
-    <section class="section active" id="sec-1" data-section="0" aria-label="Requisitos de ingreso y modelo 3D del casco">
+    <section class="section" id="sec-1" data-section="1" aria-label="Requisitos de ingreso y modelo 3D del casco" aria-hidden="true">
       <div class="section-inner">
 
         <header class="sec-header">
           <p class="eyebrow">Procedimiento de ingreso · N.° 1</p>
           <h1 class="sec-title">Requisitos para Ingresar</h1>
           <p class="sec-subtitle">
-            Para ingresar a la Planta de Molibdeno debes cumplir con requisitos específicos de seguridad y autorización. 
-            
             Ambos requisitos son obligatorios y deben cumplirse antes de ingresar al área.
           </p>
         </header>
@@ -1051,13 +1025,13 @@
           <div class="s2-model">
             <div class="model-halo" aria-hidden="true"></div>
             <div class="model-frame">
-              <!-- <div class="model-badge-pill" aria-hidden="true">
+              <div class="model-badge-pill" aria-hidden="true" style="">
                 <span class="rotate-icon">↻</span>
-                Modelo 3D Interactivo 
-              </div> -->
+                Modelo 3D Interactivo
+              </div>
               <iframe
                 id="modelIframe"
-                src="../Casco/Casco.html"></iframe>
+                src="../Epp/Epp.html"
                 title="Modelo 3D del casco de seguridad — arrastra para explorar"
                 loading="lazy"
                 
@@ -1073,7 +1047,7 @@
     <!-- ══════════════════════════════════════
          SECCIÓN 3 · QUIZ VERIFICACIÓN
     ══════════════════════════════════════ -->
-    <section class="section" id="sec-2" data-section="1" aria-label="Verificación de conocimiento" aria-hidden="true">
+    <section class="section" id="sec-2" data-section="2" aria-label="Verificación de conocimiento" aria-hidden="true">
       <div class="section-inner">
 
         <header class="sec-header">
@@ -1119,7 +1093,7 @@
   <footer class="app-footer">
     <nav class="bottom-controls" aria-label="Controles de navegación">
       <button class="ctrl-btn" id="btnPrev" type="button" disabled aria-label="Sección anterior">← Atrás</button>
-      <p class="step-label" id="stepLabel" aria-live="polite" aria-atomic="true">Sección 1 de 2 · Requisitos</p>
+      <p class="step-label" id="stepLabel" aria-live="polite" aria-atomic="true">Sección 1 de 3 · Introducción</p>
       <button class="ctrl-btn" id="btnNext" type="button" aria-label="Siguiente sección">Siguiente →</button>
     </nav>
 
@@ -1142,11 +1116,11 @@
   'use strict';
 
   /* ── Section navigation ───────────────────── */
-  const TOTAL = 2;
-  const NAMES = ['Requisitos', 'Verificación'];
+  const TOTAL = 3;
+  const NAMES = ['Introducción', 'Requisitos', 'Verificación'];
 
   let current = 0;
-  const visited = [true, false];
+  const visited = [true, false, false];
 
   const sections    = Array.from(document.querySelectorAll('.section'));
   const navPills    = Array.from(document.querySelectorAll('.nav-pill'));
@@ -1184,11 +1158,11 @@
 
     setTimeout(() => sections[prev].classList.remove('exit-left', 'exit-right'), 540);
 
-    /* Trigger 3D casco on section 1 */
-    if (current === 0) triggerCascoModel();
+    /* Trigger 3D casco on section 2 */
+    if (current === 1) triggerCascoModel();
 
-    /* Render quiz on section 2 */
-    if (current === 1) renderQuestion(quizState.current);
+    /* Render quiz on section 3 */
+    if (current === 2) renderQuestion(quizState.current);
 
     updateNavUI();
   }
@@ -1230,40 +1204,20 @@
 
   /* ── 3D Model — trigger casco ──────────────── */
   function triggerCascoModel() {
-    /* Force casco view as soon as 3D runtime is ready */
+    /* Try to call the casco procedure after the iframe loads */
     const tryActivate = () => {
       try {
         const cw = modelIframe.contentWindow;
-        if (cw && cw.v3d && cw.v3d.puzzles && typeof cw.v3d.puzzles.procedures['casco'] === 'function') {
-          cw.v3d.puzzles.procedures['casco']();
-          return true;
+        if (cw && cw.v3d && cw.v3d.puzzles && typeof cw.v3d.puzzles.procedures['sticker'] === 'function') {
+          cw.v3d.puzzles.procedures['sticker']();
         }
       } catch (e) { /* silent — model still shows */ }
-      return false;
-    };
-
-    const activateWithRetries = (maxAttempts = 90, delayMs = 250) => {
-      let attempts = 0;
-      const run = () => {
-        attempts += 1;
-        const ok = tryActivate();
-        if (ok) {
-          /* Re-apply in case the 3D scene overrides camera right after boot */
-          setTimeout(tryActivate, 700);
-          setTimeout(tryActivate, 1800);
-          return;
-        }
-        if (attempts < maxAttempts) {
-          setTimeout(run, delayMs);
-        }
-      };
-      run();
     };
 
     if (modelIframe.contentDocument && modelIframe.contentDocument.readyState === 'complete') {
-      activateWithRetries();
+      setTimeout(tryActivate, 800);
     } else {
-      modelIframe.addEventListener('load', () => activateWithRetries(), { once: true });
+      modelIframe.addEventListener('load', () => setTimeout(tryActivate, 1200), { once: true });
     }
   }
 
@@ -1443,7 +1397,6 @@
 
   /* ── Init ──────────────────────────────────── */
   updateNavUI();
-  triggerCascoModel();
 })();
 </script>
 
