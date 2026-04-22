@@ -2,23 +2,245 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cargador 3D con Precarga en Capas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Planta Molibdeno — Capacitación</title>
     <style>
+        @font-face {
+            font-family: "AASmartSans";
+            src: url("./Recursos/fonts/AASMARTSANS-REGULAR.TTF") format("truetype");
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: "AASmartSans";
+            src: url("./Recursos/fonts/AASMARTSANS-SEMIBOLD.TTF") format("truetype");
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: "AASmartSans";
+            src: url("./Recursos/fonts/AASMARTSANS-BOLD.TTF") format("truetype");
+            font-weight: 700;
+            font-style: normal;
+        }
+        :root {
+            --primary: #031795;
+            --muted: #5c678a;
+            --bg: #f4f6fc;
+            --surface: #ffffff;
+            --text: #0a1447;
+            --border: rgba(3, 23, 149, 0.12);
+            --shadow-sm: 0 1px 2px rgba(10, 20, 71, 0.04);
+            --radius-md: 14px;
+            --ease: cubic-bezier(0.4, 0, 0.2, 1);
+            --sidebar-expanded: 272px;
+            --sidebar-collapsed: 72px;
+            --sidebar-w: var(--sidebar-expanded);
+        }
+
         html, body {
-            overflow: hidden;
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: transparent;
+            overflow: hidden;
+            background: var(--bg);
+            font-family: "AASmartSans", "Segoe UI", system-ui, sans-serif;
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .app-shell {
+            --sidebar-w: var(--sidebar-expanded);
+            display: grid;
+            grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+            height: 100%;
+            min-height: 100%;
+            min-height: 100dvh;
+            transition: grid-template-columns 0.28s var(--ease);
+        }
+
+        .app-shell.sidebar-collapsed {
+            --sidebar-w: var(--sidebar-collapsed);
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, #ffffff 0%, #f8f9ff 100%);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 16px 14px calc(20px + env(safe-area-inset-bottom, 0px));
+            padding-top: calc(16px + env(safe-area-inset-top, 0px));
+            padding-left: calc(14px + env(safe-area-inset-left, 0px));
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .sidebar-toggle {
+            align-self: flex-start;
+            width: 44px;
+            height: 44px;
+            margin-bottom: 12px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            transition: background 0.2s var(--ease), transform 0.15s var(--ease);
+        }
+        .sidebar-toggle:hover {
+            background: rgba(3, 23, 149, 0.06);
+        }
+        .sidebar-toggle:active {
+            transform: scale(0.97);
+        }
+        .sidebar-toggle svg {
+            width: 22px;
+            height: 22px;
+            transition: transform 0.28s var(--ease);
+        }
+        .app-shell.sidebar-collapsed .sidebar-toggle svg {
+            transform: rotate(180deg);
+        }
+
+        .brand {
+            margin-bottom: 28px;
+            padding: 14px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            min-height: 0;
+            transition: padding 0.28s var(--ease);
+        }
+        .brand img {
+            width: 100%;
+            max-width: 188px;
+            height: auto;
+            object-fit: contain;
+            transition: max-width 0.28s var(--ease);
+        }
+        .app-shell.sidebar-collapsed .brand {
+            padding: 10px 6px;
+        }
+        .app-shell.sidebar-collapsed .brand img {
+            max-width: 44px;
+        }
+
+        .nav-section-title {
+            margin: 0 0 10px 8px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            white-space: nowrap;
+            opacity: 1;
+            max-height: 40px;
+            overflow: hidden;
+            transition: opacity 0.2s var(--ease), max-height 0.28s var(--ease), margin 0.28s var(--ease);
+        }
+        .app-shell.sidebar-collapsed .nav-section-title {
+            opacity: 0;
+            max-height: 0;
+            margin-bottom: 0;
+        }
+
+        .subnav {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .subnav-btn {
+            width: 100%;
+            border: 1px solid transparent;
+            background: transparent;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            cursor: pointer;
+            text-align: left;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+        }
+        .subnav-btn:hover:not(:disabled) {
+            background: rgba(3, 23, 149, 0.06);
+            color: var(--primary);
+        }
+        .subnav-btn.active {
+            background: var(--surface);
+            color: var(--primary);
+            border-color: var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+        .subnav-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .subnav-num {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            border: 2px solid currentColor;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .subnav-btn.active .subnav-num {
+            border-color: var(--primary);
+            background: rgba(3, 23, 149, 0.08);
+        }
+
+        .subnav-text {
+            flex: 1;
+            min-width: 0;
+            line-height: 1.35;
+            transition: opacity 0.2s var(--ease);
+        }
+        .app-shell.sidebar-collapsed .subnav-text {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        .app-shell.sidebar-collapsed .subnav-btn {
+            justify-content: center;
+            padding: 12px 10px;
+        }
+
+        .main {
+            position: relative;
+            min-width: 0;
+            min-height: 0;
+            background: #0a0e1a;
         }
 
         #contenedor-iframes {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             z-index: 1;
         }
 
@@ -31,38 +253,166 @@
             border: none;
             margin: 0;
             padding: 0;
-            opacity: 0; 
+            opacity: 0;
             z-index: -1;
-            transition: opacity 0.5s ease-in-out; 
+            transition: opacity 0.5s ease-in-out;
         }
 
         .capa-activa {
             opacity: 1;
-            z-index: 10; 
+            z-index: 10;
+        }
+
+        @media (max-width: 720px) {
+            .app-shell {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto minmax(0, 1fr);
+            }
+            .sidebar {
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 8px 12px;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            .brand {
+                margin-bottom: 0;
+                flex: 1 1 120px;
+                min-width: 0;
+            }
+            .nav-block {
+                flex: 1 1 200px;
+                min-width: 0;
+            }
+            .subnav {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            .app-shell.sidebar-collapsed .nav-section-title {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div id="contenedor-iframes"></div>
+    <div class="app-shell" id="app-shell">
+        <aside class="sidebar" id="sidebar" aria-label="Navegación principal">
+            <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-expanded="true" aria-controls="sidebar" title="Contraer o expandir barra lateral">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <div class="brand">
+                <img src="./Recursos/img/logo.png" alt="Anglo American">
+            </div>
+            <div class="nav-block">
+                <p class="nav-section-title">Módulos</p>
+                <nav class="subnav" aria-label="Módulos del curso">
+                    <button type="button" class="subnav-btn" id="btn-inicio" title="Inicio">
+                        <span class="subnav-num" aria-hidden="true">I</span>
+                        <span class="subnav-text">Inicio</span>
+                    </button>
+                    <button type="button" class="subnav-btn active" data-modulo-index="0" title="Ingreso a la planta">
+                        <span class="subnav-num" aria-hidden="true">1</span>
+                        <span class="subnav-text">Ingreso a la planta</span>
+                    </button>
+                    <button type="button" class="subnav-btn" data-modulo-index="1" title="Segundo módulo">
+                        <span class="subnav-num" aria-hidden="true">2</span>
+                        <span class="subnav-text">Segundo módulo</span>
+                    </button>
+                    <button type="button" class="subnav-btn" data-modulo-index="2" title="Tercer módulo">
+                        <span class="subnav-num" aria-hidden="true">3</span>
+                        <span class="subnav-text">Tercer módulo</span>
+                    </button>
+                </nav>
+            </div>
+        </aside>
+
+        <div class="main">
+            <div id="contenedor-iframes"></div>
+        </div>
+    </div>
 
     <script>
         let listaHtml = [];
         let indiceActual = 0;
-        const iframesCreados = {}; 
-        
+        const iframesCreados = {};
+
         const contenedor = document.getElementById('contenedor-iframes');
+        const appShell = document.getElementById('app-shell');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const btnInicio = document.getElementById('btn-inicio');
+        const subnavBtns = () => Array.from(document.querySelectorAll('.subnav-btn'));
+        const HOME_INDEX = 1;
+
+        function setSidebarCollapsed(collapsed) {
+            appShell.classList.toggle('sidebar-collapsed', collapsed);
+            sidebarToggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+            try {
+                localStorage.setItem('planta_molibdeno_sidebar_collapsed', collapsed ? '1' : '0');
+            } catch (e) { /* ignore */ }
+        }
+
+        sidebarToggle.addEventListener('click', function () {
+            setSidebarCollapsed(!appShell.classList.contains('sidebar-collapsed'));
+        });
+
+        (function initSidebarState() {
+            try {
+                if (localStorage.getItem('planta_molibdeno_sidebar_collapsed') === '1') {
+                    setSidebarCollapsed(true);
+                }
+            } catch (e) { /* ignore */ }
+        })();
+
+        function actualizarNavModulos() {
+            subnavBtns().forEach(function (btn) {
+                if (btn.id === 'btn-inicio') {
+                    var inicioDisponible = HOME_INDEX < listaHtml.length;
+                    btn.disabled = !inicioDisponible;
+                    btn.classList.toggle('active', inicioDisponible && indiceActual === HOME_INDEX);
+                    return;
+                }
+                var idx = parseInt(btn.getAttribute('data-modulo-index'), 10);
+                var disponible = idx < listaHtml.length;
+                btn.disabled = !disponible;
+                btn.classList.toggle('active', disponible && idx === indiceActual && indiceActual !== HOME_INDEX);
+            });
+        }
+
+        subnavBtns().forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                if (btn.id === 'btn-inicio') {
+                    irAInicio();
+                    return;
+                }
+                var idx = parseInt(btn.getAttribute('data-modulo-index'), 10);
+                if (!isNaN(idx)) irAModulo(idx);
+            });
+        });
+
+        function irAInicio() {
+            if (HOME_INDEX < 0 || HOME_INDEX >= listaHtml.length) return;
+            indiceActual = HOME_INDEX;
+            crearCapa(indiceActual, false);
+            crearCapa(indiceActual + 1, false);
+            crearCapa(indiceActual - 1, false);
+            mostrarCapa(indiceActual);
+        }
 
         async function cargarConfiguracion() {
             try {
                 const respuesta = await fetch('./Recursos/list/html.json');
                 if (!respuesta.ok) throw new Error("No se pudo cargar html.json");
-                
+
                 listaHtml = await respuesta.json();
-                
+
                 if (listaHtml.length > 0) {
                     crearCapa(indiceActual, true);
                     crearCapa(indiceActual + 1, false);
+                    actualizarNavModulos();
                 }
             } catch (error) {
                 console.error("Error al cargar JSON", error);
@@ -70,7 +420,6 @@
         }
 
         function crearCapa(indice, hacerActiva) {
-            // Se añade validación para evitar índices negativos
             if (indice < 0 || indice >= listaHtml.length) return;
 
             const url = listaHtml[indice];
@@ -82,7 +431,7 @@
             const nuevoIframe = document.createElement('iframe');
             nuevoIframe.src = url;
             nuevoIframe.className = 'capa-html';
-            
+
             if (hacerActiva) {
                 nuevoIframe.classList.add('capa-activa');
             }
@@ -92,39 +441,44 @@
         }
 
         function mostrarCapa(indice) {
-            Object.values(iframesCreados).forEach(iframe => {
+            Object.values(iframesCreados).forEach(function (iframe) {
                 iframe.classList.remove('capa-activa');
             });
 
             if (iframesCreados[indice]) {
                 iframesCreados[indice].classList.add('capa-activa');
             }
+            actualizarNavModulos();
         }
 
-        // Función para avanzar
-        window.siguientehtml = function() {
+        function irAModulo(indice) {
+            if (indice < 0 || indice >= listaHtml.length) return;
+            indiceActual = indice;
+            crearCapa(indice, false);
+            crearCapa(indice + 1, false);
+            crearCapa(indice - 1, false);
+            mostrarCapa(indiceActual);
+        }
+
+        window.siguientehtml = function () {
             if (indiceActual < listaHtml.length - 1) {
                 indiceActual++;
-                
+
                 mostrarCapa(indiceActual);
                 crearCapa(indiceActual + 1, false);
             }
         };
 
-        // Función nueva para retroceder
-        window.retrocederhtml = function() {
+        window.retrocederhtml = function () {
             if (indiceActual > 0) {
                 indiceActual--;
-                
+
                 mostrarCapa(indiceActual);
-                // Aunque al retroceder la capa anterior probablemente ya esté creada,
-                // llamamos a crearCapa por si acaso se necesita precargar un salto largo.
                 crearCapa(indiceActual - 1, false);
             }
         };
 
         cargarConfiguracion();
-
     </script>
 </body>
 </html>

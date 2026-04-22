@@ -620,6 +620,17 @@
       color: var(--muted);
       font-weight: 500;
     }
+
+    /* Se oculta el sidebar interno porque la navegación vive en index.html */
+    .layout {
+      grid-template-columns: 1fr;
+    }
+    .sidebar {
+      display: none;
+    }
+    #options {
+      display: none !important;
+    }
     @media (max-width: 1300px) {
       .card {
         grid-template-columns: minmax(0, min(40%, 300px)) minmax(0, 1fr);
